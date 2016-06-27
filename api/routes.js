@@ -18,20 +18,20 @@ api.post('/api/users', function(request, response){
     //lastName: 'Hancock',
     //username: 'Lanesta',
     //password: 'password'
-    
+
 	var user = request.body;
-	
+
 	bcrypt.genSalt(10, function(err, salt) {
 	    bcrypt.hash(user.password, salt, function(err, hash) {
-	        // Store hash in your password DB. 
+	        // Store hash in your password DB.
 	        user.password = hash;
 
-	        User.findOrCreate({where: {username: user.username}, defaults: user}) 
+	        User.findOrCreate({where: {username: user.username}, defaults: user})
 			.spread(function(user, created) {
 		        console.log(user.get({plain: true}))
 		        console.log(created)
-		       
-		       //each user should have a unique username 
+
+		       //each user should have a unique username
 		       if(created)
 		       	 return response.sendStatus(201);
 		   	   else
@@ -46,10 +46,22 @@ api.post('/api/users', function(request, response){
 
 });
 
-api.post('/api/authenticate', function(request, response){
-    
+api.post('/api/authenticate', function(request, response, next){
+
 	var credentials = request.body;
-	//User.findOne
+  User.findOne({ where: {username: credentials.username} })
+  .then(function(user) {
+    //compare password to hash password in db
+    bcrypt.compare(credentials.password, user.password, function(error, valid) {
+      if (error) { return next(err) }
+      if (!valid) { return response.send(401) }
+
+      //var token = jwt.encode({username: user.username}, config.secret);
+      //console.log(token);
+      //res.json(token);
+      response.sendStatus({success:true});
+    });
+  })
 });
 
 module.exports = api;

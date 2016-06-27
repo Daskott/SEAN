@@ -11,6 +11,7 @@
         $routeProvider
           .when('/', { controller: 'LoginCtrl', templateUrl: 'login.html' })
           .when('/register', { controller: 'RegisterCtrl', templateUrl: 'register.html' })
+          .when('/home', { controller: 'HomeCtrl', templateUrl: 'home.html' })
           .otherwise({ redirectTo: '/' });
     }
 

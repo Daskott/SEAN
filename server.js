@@ -2,6 +2,8 @@ var config = require('dotenv').config();
 var express = require('express');
 var logger = require('morgan');
 var jwt = require('jwt-simple');
+var sequelize = require('./databaseConfig');
+var User = require('./models/user');
 var app = express();
 
 app.use(logger('dev')) ;

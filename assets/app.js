@@ -51,22 +51,21 @@ angular.module('app')
 	    .then(function (response) {
 				console.log(response);
             if (response.success) {
-                //FlashService.Success('Registration successful', true);
-								//setcredentials
-                console.log("Your in");
-                $location.path('/home');
+              $scope.successAlert();
+							//setcredentials
+              console.log("Your in");
+              $location.path('/home');
             } else {
-                //FlashService.Error(response.message);
-                console.log("Nope!");
-                $scope.dataLoading = false;
-								$scope.failureAlert();
+              $scope.failureAlert();
+              console.log("Nope!");
+              $scope.dataLoading = false;
             }
         });
   }
 
 	$scope.successAlert = function () {
       var message = '<strong> Well done!</strong>  You successfully read this important alert message.';
-      var id = Flash.create('success', message, 0, {class: 'custom-class', id: 'custom-id'}, true);
+      var id = Flash.create('success', message, 5000, {class: 'custom-class', id: 'custom-id'}, true);
 			// First argument (string) is the type of the flash alert.
     	// Second argument (string) is the message displays in the flash alert (HTML is ok).
     	// Third argument (number, optional) is the duration of showing the flash. 0 to not automatically hide flash (user needs to click the cross on top-right corner).
@@ -79,7 +78,7 @@ angular.module('app')
       var message = '<strong> OOps!</strong>  Failed to login.';
       var id = Flash.create('danger', message, 5000, {class: 'custom-class', id: 'custom-id'}, true);
 	}
-	
+
  });
 
 var app = angular.module('app');

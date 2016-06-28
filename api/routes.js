@@ -33,7 +33,7 @@ api.post('/api/users', function(request, response){
 
 		       //each user should have a unique username
 		       if(created)
-		       	 return response.sendStatus(201);
+		       	 return response.status(201).send({success:true});
 		   	   else
 		   	   	 return response.sendStatus(403);
 
@@ -51,15 +51,17 @@ api.post('/api/authenticate', function(request, response, next){
 	var credentials = request.body;
   User.findOne({ where: {username: credentials.username} })
   .then(function(user) {
+
+		if(!user)return response.status(401).send({success:false});
     //compare password to hash password in db
     bcrypt.compare(credentials.password, user.password, function(error, valid) {
       if (error) { return next(err) }
-      if (!valid) { return response.send(401) }
+      if (!valid) { return response.status(401).send({success:false}); }
 
       //var token = jwt.encode({username: user.username}, config.secret);
       //console.log(token);
       //res.json(token);
-      response.sendStatus({success:true});
+      response.status(200).send({success:true});
     });
   })
 });

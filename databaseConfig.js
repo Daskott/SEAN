@@ -1,7 +1,9 @@
+require('dotenv').config();
 var Sequelize = require('sequelize');
 
-var sequelize = new Sequelize('SEAN', 'root', 'password', {
-  host: 'localhost',
+console.log('SEAN', process.env.DB_USER, process.env.DB_PASS);
+var sequelize = new Sequelize('SEAN', process.env.DB_USER, process.env.DB_PASS,{
+  host: process.env.DB_HOST,
   dialect: 'mysql',
 
   pool: {
@@ -11,7 +13,7 @@ var sequelize = new Sequelize('SEAN', 'root', 'password', {
   },
 
   // mysql only
-  storage: '/usr/bin/mysql'
+  storage: process.env.DB_STORAGE//'/usr/bin/mysql'
 });
 
 

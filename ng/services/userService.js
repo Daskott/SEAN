@@ -21,7 +21,7 @@ var app = angular.module('app');
 // private functions
 
 function handleSuccess(response) {
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
 }
 

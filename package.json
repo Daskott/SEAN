@@ -4,6 +4,7 @@
     "angular": "^1.5.7",
     "angular-animate": "^1.5.7",
     "angular-file-upload": "^2.3.3",
+    "angular-flash": "^1.2.0",
     "angularfire": "^2.0.1",
     "bcrypt": "^0.8.6",
     "bcryptjs": "^2.3.0",

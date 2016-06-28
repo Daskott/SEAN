@@ -1,6 +1,8 @@
 //just define module & its dependencies
 var app = angular.module('app', [
-  'ngRoute'
+  'ngRoute',
+  'ngAnimate',
+  'ngFlash'
   // 'ngCookies',
   // 'ngSanitize',
   // 'ngTagsInput',

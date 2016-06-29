@@ -2,8 +2,8 @@
 var app = angular.module('app', [
   'ngRoute',
   'ngAnimate',
+  'ngCookies',
   'ngFlash'
-  // 'ngCookies',
   // 'ngSanitize',
   // 'ngTagsInput',
   // 'firebase'

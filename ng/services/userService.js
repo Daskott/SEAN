@@ -1,5 +1,5 @@
 var app = angular.module('app');
- app.service('UserService', function ($http) {
+ app.service('UserService', function ($http, $rootScope, $cookieStore) {
    var svc = this;
 
    svc.getAllUsers = function () {
@@ -14,7 +14,28 @@ var app = angular.module('app');
      return $http.post('/api/authenticate', credentials).then(handleSuccess, handleError('Error login in user'));
    }
 
-   //TODO: clear credentials
+   svc.setCredentials = function(user, token){
+    var authdata = token;
+    $rootScope.globals = {
+          currentUser: {
+              data: user,
+              authdata: authdata
+          }
+      };
+
+    //set token for all request
+    $cookieStore.put('globals', $rootScope.globals);
+    $http.defaults.headers.common['x-auth'] = authdata;
+
+  }
+
+  //clearCredentials
+  svc.clearCredentials  = function () {
+      $rootScope.globals = {};
+      $cookieStore.remove('globals');
+      $http.defaults.headers.common.Authorization = null;
+  }
+
 
  });
 

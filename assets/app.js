@@ -2,8 +2,8 @@
 var app = angular.module('app', [
   'ngRoute',
   'ngAnimate',
+  'ngCookies',
   'ngFlash'
-  // 'ngCookies',
   // 'ngSanitize',
   // 'ngTagsInput',
   // 'firebase'
@@ -31,12 +31,27 @@ var app = angular.module('app', [
 angular.module('app')
 .controller('ApplicationCtrl', function ($scope, $rootScope) {
 
+  //when user logs in, receive signal on login
+  $scope.$on('login', function () {
+    $scope.currentUser = $rootScope.globals.currentUser.data;
+  });
 
  });
 
 angular.module('app')
-.controller('HomeCtrl', function ($scope, $rootScope) {
-  
+.controller('HomeCtrl', function ($scope, $rootScope, $location, UserService) {
+
+  UserService.getAllUsers()
+  .then(function(response){
+    $scope.users = response.users;
+  })
+  $scope.logout = function () {
+    UserService.clearCredentials();
+    //go back to sigin page
+    $location.path('/');
+    $scope.currentUser = null;
+  }
+
  });
 
 angular.module('app')
@@ -52,7 +67,9 @@ angular.module('app')
 				console.log(response);
             if (response.success) {
               $scope.successAlert();
-							//setcredentials
+							UserService.clearCredentials();
+						 	UserService.setCredentials(response.user, response.token);
+							$scope.$emit('login');
               console.log("Your in");
               $location.path('/home');
             } else {
@@ -112,7 +129,7 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
 });
 
 var app = angular.module('app');
- app.service('UserService', function ($http) {
+ app.service('UserService', function ($http, $rootScope, $cookieStore) {
    var svc = this;
 
    svc.getAllUsers = function () {
@@ -127,7 +144,28 @@ var app = angular.module('app');
      return $http.post('/api/authenticate', credentials).then(handleSuccess, handleError('Error login in user'));
    }
 
-   //TODO: clear credentials
+   svc.setCredentials = function(user, token){
+    var authdata = token;
+    $rootScope.globals = {
+          currentUser: {
+              data: user,
+              authdata: authdata
+          }
+      };
+
+    //set token for all request
+    $cookieStore.put('globals', $rootScope.globals);
+    $http.defaults.headers.common['x-auth'] = authdata;
+
+  }
+
+  //clearCredentials
+  svc.clearCredentials  = function () {
+      $rootScope.globals = {};
+      $cookieStore.remove('globals');
+      $http.defaults.headers.common.Authorization = null;
+  }
+
 
  });
 

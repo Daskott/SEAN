@@ -27,7 +27,7 @@ gulp.task('js', function(){
 });
 
 gulp.task('vendor-js', function(){
-  gulp.src(['./vendor/js/**/*.js'])
+  gulp.src(['./vendor/js/jquery-2.1.4.min.js','./vendor/js/angular.min.js','./vendor/js/**/*.js'])
   //.pipe(sourcemaps.init())
   .pipe(concat('vendor.js'))
   .pipe(ngAnnotate())

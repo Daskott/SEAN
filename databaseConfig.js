@@ -16,15 +16,4 @@ var sequelize = new Sequelize('SEAN', process.env.DB_USER, process.env.DB_PASS,{
   storage: process.env.DB_STORAGE//'/usr/bin/mysql'
 });
 
-
-// //Test
-// sequelize
-//   .authenticate()
-//   .then(function(err) {
-//     console.log('Connection has been established successfully.');
-//   })
-//   .catch(function (err) {
-//     console.log('Unable to connect to the database:', err);
-//   });
-
  module.exports = sequelize;

@@ -11,7 +11,9 @@ angular.module('app')
 				console.log(response);
             if (response.success) {
               $scope.successAlert();
-							//setcredentials
+							UserService.clearCredentials();
+						 	UserService.setCredentials(response.user, response.token);
+							$scope.$emit('login');
               console.log("Your in");
               $location.path('/home');
             } else {

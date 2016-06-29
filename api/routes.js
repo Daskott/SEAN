@@ -1,10 +1,13 @@
 'use strict';
 
+require('dotenv').config();
 var express = require('express');
 var api = express.Router();
 var parser = require('body-parser');
 var User = require(__dirname+'/../models/user');
 var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+var middleware = require(__dirname+'/middleware');
 
 api.use(parser.json()); //body parser
 
@@ -12,6 +15,39 @@ api.use(parser.json()); //body parser
 /*******************************************************
 * Define routes here
 ********************************************************/
+api.post('/api/authenticate', function(request, response, next){
+
+	var credentials = request.body;
+  User.findOne({ where: {username: credentials.username} })
+  .then(function(user) {
+
+		if(!user)return response.status(401).send({success:false, message:'Authentication failed. User not found.'});
+    //compare password to hash password in db
+    bcrypt.compare(credentials.password, user.password, function(error, valid) {
+      if (error) { return next(err) }
+      if (!valid) { return response.status(401).send({success:false, message: 'Authentication failed. Wrong password.'}); }
+
+			// console.log(user.dataValues);
+			var token = jwt.sign(user.dataValues, process.env.API_SECRET, {
+          expiresIn :'1400m' // expires in 24 hours[remember me - 30days]
+      });
+
+      // return the information including token as JSON
+      response.status(200).json({
+        success: true,
+        message: 'Authentication successful!',
+				user:{
+							firstName: user.firstName,
+		    			lastName:  user.lastName,
+		    			username:  user.username
+		    			},
+        token: token
+      });
+
+    });
+  })
+});
+
 api.post('/api/users', function(request, response){
 
     //firstName: 'John',
@@ -33,9 +69,10 @@ api.post('/api/users', function(request, response){
 
 		       //each user should have a unique username
 		       if(created)
-		       	 return response.status(201).send({success:true});
+		       	 return response.status(201).send({success:true, message: 'User created!'});
 		   	   else
-		   	   	 return response.sendStatus(403);
+		   	   	 return response.status(403)
+						 								.send({success:false, message: 'A user already exist with the username "'+user.username+'"'});
 
 		     })
 			.catch(function(error){
@@ -46,24 +83,21 @@ api.post('/api/users', function(request, response){
 
 });
 
-api.post('/api/authenticate', function(request, response, next){
+/*******************************************************
+* middleware & routes that need authorization
+********************************************************/
+api.use('/api', middleware);
 
-	var credentials = request.body;
-  User.findOne({ where: {username: credentials.username} })
-  .then(function(user) {
-
-		if(!user)return response.status(401).send({success:false});
-    //compare password to hash password in db
-    bcrypt.compare(credentials.password, user.password, function(error, valid) {
-      if (error) { return next(err) }
-      if (!valid) { return response.status(401).send({success:false}); }
-
-      //var token = jwt.encode({username: user.username}, config.secret);
-      //console.log(token);
-      //res.json(token);
-      response.status(200).send({success:true});
-    });
-  })
+api.get('/api/users', function(request, response){
+		User.findAll()
+		.then(function(users){
+				return response.json({success:true, users:users});
+		})
+		.catch(function(error){
+			return response.send({success:false, message:error});
+		});
 });
+
+
 
 module.exports = api;

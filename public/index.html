@@ -12,15 +12,9 @@
 
     <title>Signin Template for Bootstrap</title>
 
-    <!-- Vendor css -->
+    <!-- css -->
     <link href="vendor/vendor.css" rel="stylesheet">
-    <link href="vendor/angular-flash.min.css" rel="stylesheet" type="text/css"/>
-
-    <!-- Custom css -->
     <link href="/app.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <!-- <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -28,23 +22,14 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- Vendor js -->
-    <script src="vendor/jquery-2.1.4.min.js"></script>
+    <!-- vendor js -->
     <script src="vendor/vendor.js"></script>
-    <script src="vendor/angular.min.js"></script>
-    <script src="vendor/angular-route.min.js"></script>
-    <!-- App js -->
-    <script src="/app.js"></script>
   </head>
 
   <body ng-app='app' ng-controller='ApplicationCtrl'>
-
     <div ng-view ngcloak></div>
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
-    <script src="vendor/angular-animate.min.js"></script>
-    <script src="vendor/angular-flash.min.js"></script>
   </body>
 
+  <!-- app js -->
+  <script src="/app.js"></script>
 </html>

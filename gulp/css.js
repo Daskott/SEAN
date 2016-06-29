@@ -18,7 +18,7 @@ gulp.task('css', function(){
 
 //preprocess vendor style sheet
 gulp.task('vendor-css', function(){
-  gulp.src(['./vendor/css/bootstrap.min.css','./vendor/css/signin.css'])
+  gulp.src(['./vendor/css/bootstrap.min.css','./vendor/css/*.css'])
   .pipe(concatCss('vendor.css'))
   .pipe(autoprefixer({
 			browsers: ['last 2 versions'],

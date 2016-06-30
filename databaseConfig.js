@@ -1,7 +1,6 @@
 require('dotenv').config();
 var Sequelize = require('sequelize');
 
-console.log('SEAN', process.env.DB_USER, process.env.DB_PASS);
 var sequelize = new Sequelize('SEAN', process.env.DB_USER, process.env.DB_PASS,{
   host: process.env.DB_HOST,
   dialect: 'mysql',

@@ -1,8 +1,8 @@
 //just define module & its dependencies
 var app = angular.module('app', [
   'ngRoute',
-  'ngAnimate',
   'ngCookies',
+  'ngAnimate',
   'ngFlash'
   // 'ngSanitize',
   // 'ngTagsInput',
@@ -16,20 +16,53 @@ var app = angular.module('app', [
     angular
         .module('app')
         .config(config)
+        .run(run)
 
     config.$inject = ['$routeProvider', '$locationProvider'];
     function config($routeProvider, $locationProvider) {
         $routeProvider
-          .when('/', { controller: 'LoginCtrl', templateUrl: 'login.html' })
-          .when('/register', { controller: 'RegisterCtrl', templateUrl: 'register.html' })
-          .when('/home', { controller: 'HomeCtrl', templateUrl: 'home.html' })
-          .otherwise({ redirectTo: '/' });
+        .when('/login', { controller: 'LoginCtrl', templateUrl: 'login.html' })
+        .when('/register', { controller: 'RegisterCtrl', templateUrl: 'register.html' })
+        .when('/home', { controller: 'HomeCtrl', templateUrl: 'home.html' })
+        .otherwise({ redirectTo: '/login' });
+
+        // configure html5 to get links working
+        // If you don't do this, you URLs will be base.com/#/home rather than base.com/home
+        $locationProvider.html5Mode(true);
+    }
+
+    run.$inject = ['$rootScope', '$location', '$cookieStore', '$http'];
+    function run($rootScope, $location, $cookieStore, $http) {
+
+        // keep user logged in after page refresh
+        $rootScope.globals = $cookieStore.get('globals') || {};
+        if ($rootScope.globals.currentUser) {
+            $http.defaults.headers.common['x-auth'] = $rootScope.globals.currentUser.authdata; // jshint ignore:line
+        }
+
+        $rootScope.$on('$locationChangeStart', function (event, next, current) {
+            // redirect to login page if not logged in and trying to access a restricted page
+            var restrictedPage = $.inArray($location.path(), ['/', '/login', '/register']) === -1;
+            var loggedIn = $rootScope.globals.currentUser;
+            if (restrictedPage && !loggedIn) {
+                $location.path('/login');
+            }
+
+            // redirect to home page if logged in and trying to access login page
+            if (loggedIn && !restrictedPage) {
+                $location.path('/home');
+            }
+
+        });
     }
 
 })();
 
 angular.module('app')
 .controller('ApplicationCtrl', function ($scope, $rootScope) {
+
+  //when user refreshes page, mk sure use is set
+  $scope.currentUser = $rootScope.globals.currentUser? $rootScope.globals.currentUser.data : {};
 
   //when user logs in, receive signal on login
   $scope.$on('login', function () {
@@ -41,10 +74,22 @@ angular.module('app')
 angular.module('app')
 .controller('HomeCtrl', function ($scope, $rootScope, $location, UserService) {
 
-  UserService.getAllUsers()
-  .then(function(response){
+  //get all usres
+  UserService.getAllUsers().then(function(response){
     $scope.users = response.users;
   })
+
+  $scope.delete = function (userId) {
+    //delete user
+    UserService.delete(userId);
+
+    //refresh list
+    UserService.getAllUsers().then(function(response){
+      $scope.users = response.users;
+    })
+
+  }
+
   $scope.logout = function () {
     UserService.clearCredentials();
     //go back to sigin page
@@ -66,7 +111,7 @@ angular.module('app')
 	    .then(function (response) {
 				console.log(response);
             if (response.success) {
-              $scope.successAlert();
+              //$scope.successAlert();
 							UserService.clearCredentials();
 						 	UserService.setCredentials(response.user, response.token);
 							$scope.$emit('login');
@@ -144,6 +189,10 @@ var app = angular.module('app');
      return $http.post('/api/authenticate', credentials).then(handleSuccess, handleError('Error login in user'));
    }
 
+   svc.delete = function (userId) {
+    return $http.delete('/api/users/'+userId).then(handleSuccess, handleError('Error login in user'));
+  }
+
    svc.setCredentials = function(user, token){
     var authdata = token;
     $rootScope.globals = {
@@ -155,6 +204,7 @@ var app = angular.module('app');
 
     //set token for all request
     $cookieStore.put('globals', $rootScope.globals);
+    console.log("Check: "+$cookieStore.get('globals'));
     $http.defaults.headers.common['x-auth'] = authdata;
 
   }

@@ -10,7 +10,7 @@ angular.module('app')
 	    .then(function (response) {
 				console.log(response);
             if (response.success) {
-              $scope.successAlert();
+              //$scope.successAlert();
 							UserService.clearCredentials();
 						 	UserService.setCredentials(response.user, response.token);
 							$scope.$emit('login');

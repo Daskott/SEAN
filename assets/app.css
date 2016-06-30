@@ -44,3 +44,8 @@ Home Page
 .users-list {
   margin-top: 10px;
 }
+.del-pane {
+  text-align: right;
+  margin: 0;
+  padding: 0;
+}

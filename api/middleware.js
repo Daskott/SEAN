@@ -23,7 +23,6 @@ middlewareRoute.use(function(request, response, next) {
       } else {
         // if everything is good, save to request for use in other routes
         request.decoded = decoded;
-        console.log("decoded: "+decoded);
         next();
       }
     });

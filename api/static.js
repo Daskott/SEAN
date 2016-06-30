@@ -8,4 +8,8 @@ staticRouter.get('/', function(request, response){
   response.sendfile('public/index.html');
 });
 
+// staticRouter.use(function(request, response){
+//   response.sendfile('public/index.html');
+// });
+
 module.exports = staticRouter;

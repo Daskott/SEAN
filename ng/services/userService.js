@@ -14,6 +14,10 @@ var app = angular.module('app');
      return $http.post('/api/authenticate', credentials).then(handleSuccess, handleError('Error login in user'));
    }
 
+   svc.delete = function (userId) {
+    return $http.delete('/api/users/'+userId).then(handleSuccess, handleError('Error login in user'));
+  }
+
    svc.setCredentials = function(user, token){
     var authdata = token;
     $rootScope.globals = {
@@ -25,6 +29,7 @@ var app = angular.module('app');
 
     //set token for all request
     $cookieStore.put('globals', $rootScope.globals);
+    console.log("Check: "+$cookieStore.get('globals'));
     $http.defaults.headers.common['x-auth'] = authdata;
 
   }

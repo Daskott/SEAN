@@ -98,6 +98,23 @@ api.get('/api/users', function(request, response){
 		});
 });
 
+api.delete('/api/users/:id', function(request, response){
+		var userId = request.params.id;
+		User.destroy({
+		  where: {
+		    id: userId
+		  }
+		})
+		.then(function(rows){
+				if(rows === 1)
+					return response.json({success:true, message:"User with id '"+userId+"' deleted!"});
+				else
+					return response.json({success:false, message:"No row was affected! user with id ='"+userId+"' may not exist."});
+		})
+		.catch(function(error){
+			return response.send({success:false, message:error});
+		});
+});
 
 
 module.exports = api;

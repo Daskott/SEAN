@@ -5,7 +5,7 @@ Getting Started
 * Create a db with the name "SEAN"
 * Install nodejs 
 * Install gulp using npm 
-* clone the repo, and in the folder structure, create a ".env" file with the following values:
+* Clone the repo, and in the folder structure, create a ".env" file with the following values:
   -DB_HOST=localhost
   -DB_STORAGE="mySql path"
   -DB_USER=root

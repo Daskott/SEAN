@@ -29,7 +29,6 @@ var app = angular.module('app');
 
     //set token for all request
     $cookieStore.put('globals', $rootScope.globals);
-    console.log("Check: "+$cookieStore.get('globals'));
     $http.defaults.headers.common['x-auth'] = authdata;
 
   }

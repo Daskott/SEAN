@@ -19,6 +19,10 @@ var User = db.define('users', {
   password: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  roleId: {
+    type: Sequelize.INTEGER,
+    allowNull: false
   }
 }, {
   freezeTableName: true // Model tableName will be the same as the model name

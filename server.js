@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./models/roles');
 var express = require('express');
 var logger = require('morgan');
 var jwt = require('jwt-simple');

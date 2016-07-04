@@ -19,11 +19,11 @@ var app = angular.module('app', [
         .run(run)
 
     config.$inject = ['$routeProvider', '$locationProvider'];
-    function config($routeProvider, $locationProvider) {
+    function config($routeProvider, $locationProvider,$rootScope) {
         $routeProvider
         .when('/login', { controller: 'LoginCtrl', templateUrl: 'login.html' })
         .when('/register', { controller: 'RegisterCtrl', templateUrl: 'register.html' })
-        .when('/home', { controller: 'HomeCtrl', templateUrl: 'home.html' })
+        .when('/home',{ controller: 'HomeCtrl', templateUrl: 'home.html' })
         .otherwise({ redirectTo: '/login' });
 
         // configure html5 to get links working
@@ -55,7 +55,6 @@ var app = angular.module('app', [
 
         });
     }
-
 })();
 
 angular.module('app')
@@ -103,7 +102,6 @@ angular.module('app')
 .controller('LoginCtrl', function ($scope, $rootScope, $location, Flash, UserService) {
 
 	$scope.login = function(username, password) {
-    	//console.log(username, password);
    		$scope.dataLoading = true;
 			if(!username || !password)return;
 
@@ -115,7 +113,6 @@ angular.module('app')
 							UserService.clearCredentials();
 						 	UserService.setCredentials(response.user, response.token);
 							$scope.$emit('login');
-              console.log("Your in");
               $location.path('/home');
             } else {
               $scope.failureAlert();
@@ -125,6 +122,9 @@ angular.module('app')
         });
   }
 
+	$scope.reloadRoute = function() {
+   $state.reload();
+	}
 	$scope.successAlert = function () {
       var message = '<strong> Well done!</strong>  You successfully read this important alert message.';
       var id = Flash.create('success', message, 5000, {class: 'custom-class', id: 'custom-id'}, true);
@@ -156,7 +156,8 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
     		 firstName: firstName,
     		 lastName: lastName,
     		 username: username,
-    		 password: password
+    		 password: password,
+         roleId: 0
     	}
 
     	UserService.register(user)
@@ -170,6 +171,22 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
             }
         });
     //}
+  }
+});
+
+angular.module('app')
+.directive('regularHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'regularUser/home.html',
+    //css: 'my-directive/my-directive.css'
+  }
+})
+.directive('adminHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'admin/home.html',
+    //css: 'my-directive/my-directive.css'
   }
 });
 
@@ -204,7 +221,6 @@ var app = angular.module('app');
 
     //set token for all request
     $cookieStore.put('globals', $rootScope.globals);
-    console.log("Check: "+$cookieStore.get('globals'));
     $http.defaults.headers.common['x-auth'] = authdata;
 
   }

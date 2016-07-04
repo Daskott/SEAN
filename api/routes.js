@@ -37,6 +37,8 @@ api.post('/api/authenticate', function(request, response, next){
         success: true,
         message: 'Authentication successful!',
 				user:{
+							id: user.id,
+							roleId: user.roleId,
 							firstName: user.firstName,
 		    			lastName:  user.lastName,
 		    			username:  user.username
@@ -61,8 +63,9 @@ api.post('/api/users', function(request, response){
 	    bcrypt.hash(user.password, salt, function(err, hash) {
 	        // Store hash in your password DB.
 	        user.password = hash;
+					user.role = 0; //normal user
 
-	        User.findOrCreate({where: {username: user.username}, defaults: user})
+      User.findOrCreate({where: {username: user.username}, defaults: user})
 			.spread(function(user, created) {
 		        console.log(user.get({plain: true}))
 		        console.log(created)
@@ -100,6 +103,7 @@ api.get('/api/users', function(request, response){
 
 api.delete('/api/users/:id', function(request, response){
 		var userId = request.params.id;
+		//console.log("dec: "+request.decoded.role);
 		User.destroy({
 		  where: {
 		    id: userId
@@ -115,6 +119,5 @@ api.delete('/api/users/:id', function(request, response){
 			return response.send({success:false, message:error});
 		});
 });
-
 
 module.exports = api;

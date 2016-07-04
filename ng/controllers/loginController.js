@@ -2,7 +2,6 @@ angular.module('app')
 .controller('LoginCtrl', function ($scope, $rootScope, $location, Flash, UserService) {
 
 	$scope.login = function(username, password) {
-    	//console.log(username, password);
    		$scope.dataLoading = true;
 			if(!username || !password)return;
 
@@ -14,7 +13,6 @@ angular.module('app')
 							UserService.clearCredentials();
 						 	UserService.setCredentials(response.user, response.token);
 							$scope.$emit('login');
-              console.log("Your in");
               $location.path('/home');
             } else {
               $scope.failureAlert();
@@ -24,6 +22,9 @@ angular.module('app')
         });
   }
 
+	$scope.reloadRoute = function() {
+   $state.reload();
+	}
 	$scope.successAlert = function () {
       var message = '<strong> Well done!</strong>  You successfully read this important alert message.';
       var id = Flash.create('success', message, 5000, {class: 'custom-class', id: 'custom-id'}, true);

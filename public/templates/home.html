@@ -1,18 +1,4 @@
-<div class="container">
-  <h1>Hi {{currentUser.username}}!</h1>
-  <span><button class="btn btn-primary" ng-click="logout()">Logout</button></span>
-
-  <div class="list-group users-list">
-    <a href="#" class="list-group-item disabled">
-      Registered Users
-    </a>
-    <a href="" class="list-group-item" ng-repeat="user in users">
-      <h4 class="list-group-item-heading">{{user.username}}</h4>
-      <span class="list-group-item-text">{{user.firstName+" "+user.lastName}}</span>
-      <div class="del-pane">
-        <button type="button" class="btn btn-danger" ng-click="delete(user.id)">Delete</button>
-      </div>
-    </a>
-  </div>
-
+<div>
+   <regular-home-view ng-show="currentUser.roleId === 0"></regular-home-view>
+   <admin-home-view ng-show="currentUser.roleId === 1"></admin-home-view>
 </div>

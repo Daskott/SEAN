@@ -6,13 +6,13 @@ var livereload = require('gulp-livereload');
 
 //preprocess custom style sheet
 gulp.task('css', function(){
-  gulp.src(['./css/**/*.styl'])
+  gulp.src(['./css/*.styl'])
   .pipe(stylus())
   .pipe(autoprefixer({
 			browsers: ['last 2 versions'],
 			cascade: false
 		}))
-  .pipe(gulp.dest('assets'))
+  .pipe(gulp.dest('public/assets'))
   .pipe(livereload());
 });
 

@@ -8,11 +8,11 @@
         .run(run)
 
     config.$inject = ['$routeProvider', '$locationProvider'];
-    function config($routeProvider, $locationProvider) {
+    function config($routeProvider, $locationProvider,$rootScope) {
         $routeProvider
         .when('/login', { controller: 'LoginCtrl', templateUrl: 'login.html' })
         .when('/register', { controller: 'RegisterCtrl', templateUrl: 'register.html' })
-        .when('/home', { controller: 'HomeCtrl', templateUrl: 'home.html' })
+        .when('/home',{ controller: 'HomeCtrl', templateUrl: 'home.html' })
         .otherwise({ redirectTo: '/login' });
 
         // configure html5 to get links working
@@ -44,5 +44,4 @@
 
         });
     }
-
 })();

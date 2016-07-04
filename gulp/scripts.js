@@ -22,9 +22,10 @@ gulp.task('js', function(){
   //.pipe(ngAnnotate())
   //.pipe(uglify())
   //.pipe(sourcemaps.write())
-  .pipe(gulp.dest('assets'))
+  .pipe(gulp.dest('public/assets'))
   .pipe(livereload());
 });
+
 
 gulp.task('vendor-js', function(){
   gulp.src(['./vendor/js/jquery-2.1.4.min.js',

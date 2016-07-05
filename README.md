@@ -1,5 +1,5 @@
 # SEAN
-SEAN is a simple project for an easy starting point with [Mysql](https://www.mysql.com/) with [Sequelize](http://docs.sequelizejs.com/en/latest/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](https://angularjs.org/) based applications. It is designed to give you a quick and organized way to start developing SEAN based web apps.
+SEAN is a simple project for an easy starting point with [Mysql](https://www.mysql.com/)(using the [Sequelize] ORM)(http://docs.sequelizejs.com/en/latest/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](https://angularjs.org/) based applications. It is designed to give you a quick and organized way to start developing SEAN based web apps.
 
 ## Prerequisite Technologies
 ### Linux

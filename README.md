@@ -46,11 +46,11 @@ $ npm install
 ```
 * In the ./SEAN dir, create a ".env" file with the following values:
 ```
-  * DB_HOST=localhost
-  * DB_STORAGE="mySql path"
-  * DB_USER=root
-  * DB_PASS=""
-  * API_SECRET = "Anything you want"
+  DB_HOST=localhost
+  DB_STORAGE="mySql path"
+  DB_USER=root
+  DB_PASS=""
+  API_SECRET = "Anything you want"
 ```
 * To start your web server: Run "gulp" from terminal
 ```

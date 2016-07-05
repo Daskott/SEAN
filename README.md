@@ -5,6 +5,7 @@ SEAN is a simple project for an easy starting point with [Mysql](https://www.mys
 ### Linux
 * *Node.js* - <a href="http://nodejs.org/download/">Download</a> and Install Node.js, nodeschool has free <a href=" http://nodeschool.io/#workshoppers">node tutorials</a> to get you started. Recommend node version is node-4.x to run sean.
 * *Mysql* - <a href="http://dev.mysql.com/doc/refman/5.7/en/linux-installation.html">Download</a>
+
 If you're using ubuntu, this is the preferred repository to use...
 
 ```bash

@@ -1,4 +1,10 @@
 /********************************
+General
+*********************************/
+.center {
+  text-align: center;
+}
+/********************************
 Signin Page
 *********************************/
 body {
@@ -28,16 +34,6 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
 /********************************
 Home Page
 *********************************/
@@ -48,4 +44,7 @@ Home Page
   text-align: right;
   margin: 0;
   padding: 0;
+}
+.content {
+  max-width: 660px;
 }

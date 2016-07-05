@@ -28,10 +28,17 @@ api.post('/api/authenticate', function(request, response, next){
       if (!valid) { return response.status(401).send({success:false, message: 'Authentication failed. Wrong password.'}); }
 
 			// console.log(user.dataValues);
-			var token = jwt.sign(user.dataValues, process.env.API_SECRET, {
-          expiresIn :'1400m' // expires in 24 hours[remember me - 30days]
-      });
+			var token;
 
+			if(credentials.rememberMe){
+				token = jwt.sign(user.dataValues, process.env.API_SECRET, {
+          expiresIn :'43200m' // expires in 30days
+      	});
+			}else{
+				token = jwt.sign(user.dataValues, process.env.API_SECRET, {
+          expiresIn :'1400m' // expires in 24hours
+      	});
+			}
       // return the information including token as JSON
       response.status(200).json({
         success: true,

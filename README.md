@@ -33,9 +33,6 @@ $ npm install -g gulp
 // and bower
 $ npm install -g bower
 ```
-
-
-Getting Started
 * Create a DB with the name "SEAN"
 ```
 $ mysql> create database SEAN;
@@ -52,6 +49,8 @@ $ npm install
   DB_PASS=""
   API_SECRET = "Anything you want"
 ```
+## Start web server
+
 * To start your web server: Run "gulp" from terminal
 ```
 $ gulp

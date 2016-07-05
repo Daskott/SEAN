@@ -51,4 +51,4 @@ $ mysql> create database SEAN;
 ```
 $ gulp
 ```
-* Access the web app at http://localhost:8080/
+* Access the web app at (http://localhost:8080/)

@@ -51,7 +51,7 @@ $ npm install
 ```
 ## Start web server
 
-* To start your web server: Run "gulp" from terminal
+* To start your web server, from terminal run:
 ```
 $ gulp
 ```

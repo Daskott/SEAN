@@ -5,6 +5,7 @@ var express = require('express');
 var api = express.Router();
 var parser = require('body-parser');
 var User = require(__dirname+'/../models/user');
+var Role = require(__dirname+'/../models/roles');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var middleware = require(__dirname+'/middleware');
@@ -70,7 +71,7 @@ api.post('/api/users', function(request, response){
 	    bcrypt.hash(user.password, salt, function(err, hash) {
 	        // Store hash in your password DB.
 	        user.password = hash;
-					user.role = 0; //normal user
+					user.role = 1; //normal user
 
       User.findOrCreate({where: {username: user.username}, defaults: user})
 			.spread(function(user, created) {
@@ -86,7 +87,7 @@ api.post('/api/users', function(request, response){
 
 		     })
 			.catch(function(error){
-				return response.send(error);
+				return response.send(error.message);
 			});
 	    });
 	});
@@ -99,12 +100,42 @@ api.post('/api/users', function(request, response){
 api.use('/api', middleware);
 
 api.get('/api/users', function(request, response){
-		User.findAll()
+		User.findAll({attributes: { exclude: ['password'] }})
 		.then(function(users){
 				return response.json({success:true, users:users});
 		})
 		.catch(function(error){
-			return response.send({success:false, message:error});
+			return response.send({success:false, message:error.message});
+		});
+});
+
+api.put('/api/users/:id', function(request, response){
+		var userId = request.params.id;
+		var userUpdate = request.body;
+
+		User.find({
+		  where: {
+		    id: userId
+		  }
+		})
+		.then(function(user) {
+		  if (user) { // if the record exists in the db
+		    	User.update(
+							userUpdate
+						,
+						{
+							where: {id: userId}
+	  				})
+					.then(function(data) {
+							return response.json({success:true, message: 'User updated!'});
+					})
+					.catch(function(error){
+						return response.send({success:false, message:error.message});
+					});
+		  }
+		})
+		.catch(function(error){
+			return response.send({success:false, message:error.message});
 		});
 });
 
@@ -123,7 +154,17 @@ api.delete('/api/users/:id', function(request, response){
 					return response.json({success:false, message:"No row was affected! user with id ='"+userId+"' may not exist."});
 		})
 		.catch(function(error){
-			return response.send({success:false, message:error});
+			return response.send({success:false, message:error.message});
+		});
+});
+
+api.get('/api/roles', function(request, response){
+		Role.findAll()
+		.then(function(roles){
+				return response.json({success:true, roles:roles});
+		})
+		.catch(function(error){
+			return response.send({success:false, message:error.message});
 		});
 });
 

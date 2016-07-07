@@ -1,8 +1,11 @@
 <div class="container content">
   <h1>Hi {{currentUser.username}}!</h1>
-  <h4>Administrator</h4>
-  <span><button class="btn btn-primary" ng-click="logout()">Logout</button></span>
-
+  <div class="margin-bottom">
+    <h4>Administrator</h4>
+    <span><button class="btn btn-primary" ng-click="logout()">Logout</button></span>
+  </div>
+  <flash-message>
+  </flash-message>
   <div class="list-group users-list">
     <a href="#" class="list-group-item disabled">
       Registered User
@@ -11,7 +14,14 @@
       <h4 class="list-group-item-heading">{{user.username}}</h4>
       <span class="list-group-item-text">{{user.firstName+" "+user.lastName}}</span>
       <div class="del-pane">
-        <button type="button" ng-disabled="user.id == currentUser.id" class="btn btn-danger" ng-click="delete(user.id)">
+        <div class="form-group">
+          <label for="roles">User role (select one):</label>
+          <select ng-model="selectedItem" ng-init="selectedItem = roles[user.roleId].name" class="form-control"
+          ng-change="updateUserRole(user, selectedItem)">
+            <option ng-repeat="role in roles" value="{{role.name}}">{{role.name}}</option>
+          </select>
+        </div>
+        <button type="button" ng-disabled="user.id === currentUser.id" class="btn btn-danger" ng-click="delete(user.id)">
           Delete
         </button>
       </div>
@@ -19,3 +29,4 @@
   </div>
 
 </div>
+<!-- ng-selected="role.roleId === user.roleId" -->

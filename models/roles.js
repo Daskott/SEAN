@@ -26,13 +26,13 @@ Role.sync()
 .then(function () {
   // Table created
   var user = {
-        roleId: 0,
+        roleId: 1,
         name: "User",
         description:  "can veiw"
   };
 
   var admin = {
-        roleId: 1,
+        roleId: 0,
         name: "Admin",
         description:  "can veiw, can delete"
   };

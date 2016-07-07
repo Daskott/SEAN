@@ -12,7 +12,7 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
     		 lastName: lastName,
     		 username: username,
     		 password: password,
-         roleId: 0
+         roleId: 1
     	}
 
     	UserService.register(user)

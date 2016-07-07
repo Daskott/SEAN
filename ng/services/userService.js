@@ -10,12 +10,20 @@ var app = angular.module('app');
      return $http.post('/api/users', user).then(handleSuccess, handleError('Error creating user'));
    }
 
-    svc.login = function (credentials) {
+   svc.updateUser = function (userId, userUpdate) {
+     return $http.put('/api/users/'+userId, userUpdate).then(handleSuccess, handleError('Error updating user'));
+   }
+
+   svc.login = function (credentials) {
      return $http.post('/api/authenticate', credentials).then(handleSuccess, handleError('Error login in user'));
    }
 
    svc.delete = function (userId) {
     return $http.delete('/api/users/'+userId).then(handleSuccess, handleError('Error login in user'));
+  }
+
+  svc.getUserRoles = function () {
+    return $http.get('/api/roles').then(handleSuccess, handleError('Error getting user roles'));
   }
 
    svc.setCredentials = function(user, token){

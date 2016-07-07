@@ -58,23 +58,7 @@ var app = angular.module('app', [
 })();
 
 angular.module('app')
-.directive('regularHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'regularUser/home.html'
-    //css: 'my-directive/my-directive.css'
-  }
-})
-.directive('adminHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'admin/home.html'
-    //css: 'my-directive/my-directive.css'
-  }
-});
-
-angular.module('app')
-.controller('ApplicationCtrl', function ($scope, $rootScope) {
+.controller('ApplicationCtrl', function ($scope, $rootScope, UserService) {
 
   //when user refreshes page, mk sure use is set
   $scope.currentUser = $rootScope.globals.currentUser? $rootScope.globals.currentUser.data : {};
@@ -87,7 +71,12 @@ angular.module('app')
  });
 
 angular.module('app')
-.controller('HomeCtrl', function ($scope, $rootScope, $location, UserService) {
+.controller('HomeCtrl', function ($scope, $rootScope, $location, UserService, FlashService) {
+
+  //get all user roles
+  UserService.getUserRoles().then(function(response){
+    $scope.roles = response.roles;
+  });
 
   //get all usres
   UserService.getAllUsers().then(function(response){
@@ -103,6 +92,34 @@ angular.module('app')
       $scope.users = response.users;
     })
 
+  }
+
+  $scope.updateUserRole = function (user, role) {
+
+    $scope.dataLoading = true;
+
+    //set user role
+    for(var i = 0; i < $scope.roles.length; i++){
+      if($scope.roles[i].name === role){
+        user.roleId = i;
+        break;
+      }
+    }
+
+    //role update
+    var role = {
+        roleId:user.roleId
+    }
+
+    //save new role
+    UserService.updateUser(user.id, role)
+    .then(function(response){
+      if (response.success) {
+        FlashService.successAlert(user.username+"'s role has been updated!");
+      } else {
+        FlashService.failureAlert(response.message);
+      }
+    });
   }
 
   $scope.logout = function () {
@@ -155,7 +172,7 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
     		 lastName: lastName,
     		 username: username,
     		 password: password,
-         roleId: 0
+         roleId: 1
     	}
 
     	UserService.register(user)
@@ -169,6 +186,22 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
             }
         });
     //}
+  }
+});
+
+angular.module('app')
+.directive('regularHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'regularUser/home.html'
+    //css: 'my-directive/my-directive.css'
+  }
+})
+.directive('adminHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'admin/home.html'
+    //css: 'my-directive/my-directive.css'
   }
 });
 
@@ -214,12 +247,20 @@ var app = angular.module('app');
      return $http.post('/api/users', user).then(handleSuccess, handleError('Error creating user'));
    }
 
-    svc.login = function (credentials) {
+   svc.updateUser = function (userId, userUpdate) {
+     return $http.put('/api/users/'+userId, userUpdate).then(handleSuccess, handleError('Error updating user'));
+   }
+
+   svc.login = function (credentials) {
      return $http.post('/api/authenticate', credentials).then(handleSuccess, handleError('Error login in user'));
    }
 
    svc.delete = function (userId) {
     return $http.delete('/api/users/'+userId).then(handleSuccess, handleError('Error login in user'));
+  }
+
+  svc.getUserRoles = function () {
+    return $http.get('/api/roles').then(handleSuccess, handleError('Error getting user roles'));
   }
 
    svc.setCredentials = function(user, token){

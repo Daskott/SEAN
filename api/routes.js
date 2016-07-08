@@ -9,12 +9,13 @@ var Role = require(__dirname+'/../models/roles');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var middleware = require(__dirname+'/middleware');
+var adminMiddleware = require(__dirname+'/adminMiddleware');
 
 api.use(parser.json()); //body parser
 
 
 /*******************************************************
-* Define routes here
+* Public routes here
 ********************************************************/
 api.post('/api/authenticate', function(request, response, next){
 
@@ -30,6 +31,7 @@ api.post('/api/authenticate', function(request, response, next){
 
 			// console.log(user.dataValues);
 			var token;
+			var expiresIn;
 
 			if(credentials.rememberMe){
 				token = jwt.sign(user.dataValues, process.env.API_SECRET, {
@@ -40,20 +42,30 @@ api.post('/api/authenticate', function(request, response, next){
           expiresIn :'1400m' // expires in 24hours
       	});
 			}
-      // return the information including token as JSON
-      response.status(200).json({
-        success: true,
-        message: 'Authentication successful!',
-				user:{
-							id: user.id,
-							roleId: user.roleId,
-							firstName: user.firstName,
-		    			lastName:  user.lastName,
-		    			username:  user.username
-		    			},
-        token: token
-      });
 
+			// verifies token and send
+	    jwt.verify(token, process.env.API_SECRET, function(err, decoded) {
+	      if (err) {
+	        return response.json({ success: false, message: 'Failed to authenticate token.' });
+	      } else {
+					expiresIn = decoded.exp;
+
+					// return the information including token as JSON
+		      response.status(200).json({
+		        success: true,
+		        message: 'Authentication successful!',
+						user:{
+									id: user.id,
+									roleId: user.roleId,
+									firstName: user.firstName,
+				    			lastName:  user.lastName,
+				    			username:  user.username
+				    			},
+		        token: token,
+						expiresIn: expiresIn
+		      });
+	      }
+	    });
     });
   })
 });
@@ -95,7 +107,7 @@ api.post('/api/users', function(request, response){
 });
 
 /*******************************************************
-* middleware & routes that need authorization
+* authenticated user routes here
 ********************************************************/
 api.use('/api', middleware);
 
@@ -139,6 +151,21 @@ api.put('/api/users/:id', function(request, response){
 		});
 });
 
+api.get('/api/roles', function(request, response){
+		Role.findAll()
+		.then(function(roles){
+				return response.json({success:true, roles:roles});
+		})
+		.catch(function(error){
+			return response.send({success:false, message:error.message});
+		});
+});
+
+/*******************************************************
+* Admin routes here
+********************************************************/
+api.use('/api', adminMiddleware);
+
 api.delete('/api/users/:id', function(request, response){
 		var userId = request.params.id;
 		//console.log("dec: "+request.decoded.role);
@@ -152,16 +179,6 @@ api.delete('/api/users/:id', function(request, response){
 					return response.json({success:true, message:"User with id '"+userId+"' deleted!"});
 				else
 					return response.json({success:false, message:"No row was affected! user with id ='"+userId+"' may not exist."});
-		})
-		.catch(function(error){
-			return response.send({success:false, message:error.message});
-		});
-});
-
-api.get('/api/roles', function(request, response){
-		Role.findAll()
-		.then(function(roles){
-				return response.json({success:true, roles:roles});
 		})
 		.catch(function(error){
 			return response.send({success:false, message:error.message});

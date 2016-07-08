@@ -1,14 +1,14 @@
 angular.module('app')
 .controller('HomeCtrl', function ($scope, $rootScope, $location, UserService, FlashService) {
 
-  //get all user roles
-  UserService.getUserRoles().then(function(response){
-    $scope.roles = response.roles;
-  });
-
   //get all usres
   UserService.getAllUsers().then(function(response){
-    $scope.users = response.users;
+    if(response.users){
+       $scope.users = response.users;
+    }else{
+      $scope.users = [];
+      console.log(response.message);
+    }
   })
 
   $scope.delete = function (userId) {
@@ -48,13 +48,6 @@ angular.module('app')
         FlashService.failureAlert(response.message);
       }
     });
-  }
-
-  $scope.logout = function () {
-    UserService.clearCredentials();
-    //go back to sigin page
-    $location.path('/');
-    $scope.currentUser = null;
   }
 
  });

@@ -5,6 +5,7 @@ var express = require('express');
 var parser = require('body-parser');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+var Role = require(__dirname+'/../models/roles');
 var middlewareRoute = express.Router();
 
 // route middleware to verify a token
@@ -21,9 +22,15 @@ middlewareRoute.use(function(request, response, next) {
       if (err) {
         return response.json({ success: false, expired: true, message: 'Failed to authenticate token.'});
       } else {
-        // if everything is good, save to request for use in other routes
-        request.decoded = decoded;
-        next();
+        // if user is an admin Give access
+        Role.findAll()
+        .then(function(roles){
+            if(roles[decoded.roleId].name === 'Admin'){
+                next();
+            }else {
+              return response.status(401).json({ success: false, message: 'You do not have Authorization.'});
+            }
+        });
       }
     });
 

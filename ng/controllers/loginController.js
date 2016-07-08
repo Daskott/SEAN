@@ -10,10 +10,10 @@ angular.module('app')
 
     	UserService.login({username:username, password:password, rememberMe:rememberMe})
 	    .then(function (response) {
-				console.log(response);
+				console.log(response.expiresIn);
             if (response.success) {
 							UserService.clearCredentials();
-						 	UserService.setCredentials(response.user, response.token);
+						 	UserService.setCredentials(response.user, response.token, response.expiresIn);
 							$scope.$emit('login');
               $location.path('/home');
             } else {

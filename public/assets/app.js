@@ -33,7 +33,6 @@ var app = angular.module('app', [
 
     run.$inject = ['$rootScope', '$location', '$cookieStore', '$http'];
     function run($rootScope, $location, $cookieStore, $http) {
-
         // keep user logged in after page refresh
         $rootScope.globals = $cookieStore.get('globals') || {};
         if ($rootScope.globals.currentUser) {
@@ -58,7 +57,7 @@ var app = angular.module('app', [
 })();
 
 angular.module('app')
-.controller('ApplicationCtrl', function ($scope, $rootScope, UserService) {
+.controller('ApplicationCtrl', function ($scope, $rootScope, $location, UserService) {
 
   //when user refreshes page, mk sure use is set
   $scope.currentUser = $rootScope.globals.currentUser? $rootScope.globals.currentUser.data : {};
@@ -68,19 +67,41 @@ angular.module('app')
     $scope.currentUser = $rootScope.globals.currentUser.data;
   });
 
+  //when logout signal is emitted, handle it here
+  $rootScope.$on('logout', function () {
+    $scope.logout();
+  });
+
+  //get all user roles
+  UserService.getUserRoles().then(function(response){
+    if(response.roles){
+      $scope.roles = response.roles;
+    }else{
+      $scope.roles = [];
+      console.log(response.message);
+    }
+  });
+  
+  $scope.logout = function () {
+    UserService.clearCredentials();
+    //go back to sigin page
+    $location.path('/');
+    $scope.currentUser = null;
+  }
+
  });
 
 angular.module('app')
 .controller('HomeCtrl', function ($scope, $rootScope, $location, UserService, FlashService) {
 
-  //get all user roles
-  UserService.getUserRoles().then(function(response){
-    $scope.roles = response.roles;
-  });
-
   //get all usres
   UserService.getAllUsers().then(function(response){
-    $scope.users = response.users;
+    if(response.users){
+       $scope.users = response.users;
+    }else{
+      $scope.users = [];
+      console.log(response.message);
+    }
   })
 
   $scope.delete = function (userId) {
@@ -122,13 +143,6 @@ angular.module('app')
     });
   }
 
-  $scope.logout = function () {
-    UserService.clearCredentials();
-    //go back to sigin page
-    $location.path('/');
-    $scope.currentUser = null;
-  }
-
  });
 
 angular.module('app')
@@ -143,10 +157,10 @@ angular.module('app')
 
     	UserService.login({username:username, password:password, rememberMe:rememberMe})
 	    .then(function (response) {
-				console.log(response);
+				console.log(response.expiresIn);
             if (response.success) {
 							UserService.clearCredentials();
-						 	UserService.setCredentials(response.user, response.token);
+						 	UserService.setCredentials(response.user, response.token, response.expiresIn);
 							$scope.$emit('login');
               $location.path('/home');
             } else {
@@ -263,12 +277,13 @@ var app = angular.module('app');
     return $http.get('/api/roles').then(handleSuccess, handleError('Error getting user roles'));
   }
 
-   svc.setCredentials = function(user, token){
+   svc.setCredentials = function(user, token, expiresIn){
     var authdata = token;
     $rootScope.globals = {
           currentUser: {
               data: user,
-              authdata: authdata
+              authdata: authdata,
+              expiresIn: expiresIn
           }
       };
 
@@ -285,18 +300,19 @@ var app = angular.module('app');
       $http.defaults.headers.common.Authorization = null;
   }
 
+  // private functions
+  function handleSuccess(response) {
+      //if token has expired emit 'logout' signal
+      if(response.data.expired){
+        $rootScope.$emit('logout');
+      }
+      return response.data;
+  }
+
+  function handleError(error) {
+      return function () {
+          return { success: false, message: error };
+      };
+  }
 
  });
-
-// private functions
-
-function handleSuccess(response) {
-    //console.log(response.data);
-    return response.data;
-}
-
-function handleError(error) {
-    return function () {
-        return { success: false, message: error };
-    };
-}

@@ -26,12 +26,13 @@ var app = angular.module('app');
     return $http.get('/api/roles').then(handleSuccess, handleError('Error getting user roles'));
   }
 
-   svc.setCredentials = function(user, token){
+   svc.setCredentials = function(user, token, expiresIn){
     var authdata = token;
     $rootScope.globals = {
           currentUser: {
               data: user,
-              authdata: authdata
+              authdata: authdata,
+              expiresIn: expiresIn
           }
       };
 
@@ -48,18 +49,19 @@ var app = angular.module('app');
       $http.defaults.headers.common.Authorization = null;
   }
 
+  // private functions
+  function handleSuccess(response) {
+      //if token has expired emit 'logout' signal
+      if(response.data.expired){
+        $rootScope.$emit('logout');
+      }
+      return response.data;
+  }
+
+  function handleError(error) {
+      return function () {
+          return { success: false, message: error };
+      };
+  }
 
  });
-
-// private functions
-
-function handleSuccess(response) {
-    //console.log(response.data);
-    return response.data;
-}
-
-function handleError(error) {
-    return function () {
-        return { success: false, message: error };
-    };
-}

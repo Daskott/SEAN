@@ -33,7 +33,8 @@ var app = angular.module('app');
               data: user,
               authdata: authdata,
               expiresIn: expiresIn
-          }
+          },
+          roles: [{}]
       };
 
     //set token for all request

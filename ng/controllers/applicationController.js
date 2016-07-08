@@ -1,8 +1,9 @@
 angular.module('app')
-.controller('ApplicationCtrl', function ($scope, $rootScope, $location, UserService) {
+.controller('ApplicationCtrl', function ($scope, $rootScope, $cookieStore, $location, UserService) {
 
   //when user refreshes page, mk sure use is set
   $scope.currentUser = $rootScope.globals.currentUser? $rootScope.globals.currentUser.data : {};
+  $scope.roles = $rootScope.globals.roles? $rootScope.globals.roles : [];
 
   //when user logs in, receive signal on login
   $scope.$on('login', function () {
@@ -10,6 +11,9 @@ angular.module('app')
     UserService.getUserRoles().then(function(response){
       if(response.roles){
         $scope.roles = response.roles;
+        //cache user roles
+        $rootScope.globals.roles = $scope.roles;
+        $cookieStore.put('globals', $rootScope.globals);
       }else{
         $scope.roles = [];
         console.log(response.message);

@@ -64,6 +64,15 @@ angular.module('app')
 
   //when user logs in, receive signal on login
   $scope.$on('login', function () {
+    //get all user roles
+    UserService.getUserRoles().then(function(response){
+      if(response.roles){
+        $scope.roles = response.roles;
+      }else{
+        $scope.roles = [];
+        console.log(response.message);
+      }
+    });
     $scope.currentUser = $rootScope.globals.currentUser.data;
   });
 
@@ -72,16 +81,6 @@ angular.module('app')
     $scope.logout();
   });
 
-  //get all user roles
-  UserService.getUserRoles().then(function(response){
-    if(response.roles){
-      $scope.roles = response.roles;
-    }else{
-      $scope.roles = [];
-      console.log(response.message);
-    }
-  });
-  
   $scope.logout = function () {
     UserService.clearCredentials();
     //go back to sigin page

@@ -1,8 +1,9 @@
 <div class="container content">
   <h1>Hi {{currentUser.username}}!</h1>
-  <h4>Regular User</h4>
-  <span><button class="btn btn-primary" ng-click="logout()">Logout</button></span>
-
+  <div class="margin-bottom">
+    <h4 id="user-title">Regular User</h4>
+    <span><button class="btn btn-primary" ng-click="logout()">Logout</button></span>
+  </div>
   <div class="list-group users-list">
     <a href="#" class="list-group-item disabled">
       Registered User

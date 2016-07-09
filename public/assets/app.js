@@ -3,6 +3,7 @@ var app = angular.module('app', [
   'ngRoute',
   'ngCookies',
   'ngAnimate',
+  'angularCSS',
   'ngFlash'
   // 'ngSanitize',
   // 'ngTagsInput',
@@ -48,29 +49,13 @@ var app = angular.module('app', [
             }
 
             // redirect to home page if logged in and trying to access login page
-            if (loggedIn && !restrictedPage) {
+            if (loggedIn && $location.path() === '/login') {
                 $location.path('/home');
             }
 
         });
     }
 })();
-
-angular.module('app')
-.directive('regularHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'regularUser/home.html'
-    //css: 'my-directive/my-directive.css'
-  }
-})
-.directive('adminHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'admin/home.html'
-    //css: 'my-directive/my-directive.css'
-  }
-});
 
 angular.module('app')
 .controller('ApplicationCtrl', function ($scope, $rootScope, $cookieStore, $location, UserService) {
@@ -137,7 +122,7 @@ angular.module('app')
   $scope.updateUserRole = function (user, role) {
 
     $scope.dataLoading = true;
-
+    console.log(user);
     //set user role
     for(var i = 0; i < $scope.roles.length; i++){
       if($scope.roles[i].name === role){
@@ -219,6 +204,26 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
             }
         });
     //}
+  }
+});
+
+angular.module('app')
+.directive('regularHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'regularUser/home.html',
+    controller: function ($scope, $css) {
+      $css.bind('regularUser/app.css', $scope);
+    }
+  }
+})
+.directive('adminHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'admin/home.html',
+    controller: function ($scope, $css) {
+      $css.bind('admin/app.css', $scope);
+    }
   }
 });
 

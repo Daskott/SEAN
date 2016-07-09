@@ -125,30 +125,50 @@ api.put('/api/users/:id', function(request, response){
 		var userId = request.params.id;
 		var userUpdate = request.body;
 
-		User.find({
-		  where: {
-		    id: userId
-		  }
+		/*
+		* check user role
+		* if admin allow update
+		* if normal user, make sure he/she update's
+		* only their record [except their role]
+		*
+		*/
+		var userRoleId = request.decoded.roleId;
+		var currentUserId = request.decoded.id;
+		Role.findAll()
+		.then(function(roles){
+			var isRoleUpdate = userUpdate.roleId? true:false;
+
+			if(roles[userRoleId].name === 'Admin'
+					|| userId+'' === currentUserId+'' && !isRoleUpdate){
+				//update user record
+				User.find({
+				  where: {
+				    id: userId
+				  }
+				})
+				.then(function(user) {
+				  if (user) { // if the record exists in the db
+				    	User.update(
+									userUpdate
+								,
+								{
+									where: {id: userId}
+			  				})
+							.then(function(data) {
+									return response.json({success:true, message: 'User updated!'});
+							})
+							.catch(function(error){
+								return response.send({success:false, message:error.message});
+							});
+				  }
+				})
+				.catch(function(error){
+					return response.send({success:false, message:error.message});
+				});
+			}else {
+				return response.status(401).json({ success: false, message: 'You do not have Authorization.'});
+			}
 		})
-		.then(function(user) {
-		  if (user) { // if the record exists in the db
-		    	User.update(
-							userUpdate
-						,
-						{
-							where: {id: userId}
-	  				})
-					.then(function(data) {
-							return response.json({success:true, message: 'User updated!'});
-					})
-					.catch(function(error){
-						return response.send({success:false, message:error.message});
-					});
-		  }
-		})
-		.catch(function(error){
-			return response.send({success:false, message:error.message});
-		});
 });
 
 api.get('/api/roles', function(request, response){

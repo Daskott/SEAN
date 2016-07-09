@@ -37,7 +37,7 @@
             }
 
             // redirect to home page if logged in and trying to access login page
-            if (loggedIn && !restrictedPage) {
+            if (loggedIn && $location.path() === '/login') {
                 $location.path('/home');
             }
 

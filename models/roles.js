@@ -40,10 +40,6 @@ Role.sync()
   //create admin role
   Role.findOrCreate({where: {roleId: admin.roleId}, defaults: admin})
   .spread(function(user, created) {
-      //  if(created)
-      //   console.log("Admin role created!");
-      //  else
-      //   console.log("Admin role already exist!");
    })
   .catch(function(error){
       console.log("Error: "+error);
@@ -52,10 +48,6 @@ Role.sync()
   //create user role
   Role.findOrCreate({where: {roleId: user.roleId}, defaults: user})
   .spread(function(user, created) {
-      // if(created)
-      //  console.log("User role created!");
-      // else
-      //  console.log("User role already exist!");
    })
   .catch(function(error){
       console.log("Error: "+error);

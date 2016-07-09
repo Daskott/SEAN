@@ -3,7 +3,7 @@
 * generate files in 'assets' dir
 * watch files defined and generate new assets
 **********************************************/
-
+require('dotenv').config();
 var gulp = require('gulp');
 var fs = require('fs');
 
@@ -13,8 +13,6 @@ fs.readdirSync(__dirname + '/gulp').forEach(function (task) { require('./gulp/' 
 /****************************************
 * define meta tasks
 *******************************************/
-//gulp.task('watch',['watch:css','watch:js']); //watch task
-
-gulp.task('dev',['watch','dev:server']);
+gulp.task('dev',['db:migrate','watch','dev:server']);
 
 gulp.task('default',['dev']); //default gulp task

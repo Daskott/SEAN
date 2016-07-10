@@ -24,6 +24,7 @@
     "gulp-shell": "^0.5.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-stylus": "^2.4.0",
+    "gulp-sync": "^0.1.4",
     "gulp-uglify": "^1.5.3",
     "jshint": "^2.9.2",
     "jsonwebtoken": "^7.0.0",
@@ -49,7 +50,6 @@
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.2.0",
-    "util": "^0.10.3"
   },
   "scripts": {
     "test": ""

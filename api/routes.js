@@ -4,12 +4,14 @@ require('dotenv').config();
 var express = require('express');
 var api = express.Router();
 var parser = require('body-parser');
-var User = require(__dirname+'/../models/user');
-var Role = require(__dirname+'/../models/roles');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var middleware = require(__dirname+'/middleware');
 var adminMiddleware = require(__dirname+'/adminMiddleware');
+var models = require(__dirname+'/../models');
+var User = models.Users;
+var Role = models.Roles;
+
 
 api.use(parser.json()); //body parser
 

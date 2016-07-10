@@ -13,6 +13,6 @@ fs.readdirSync(__dirname + '/gulp').forEach(function (task) { require('./gulp/' 
 /****************************************
 * define meta tasks
 *******************************************/
-gulp.task('dev',['db:migrate','watch','dev:server']);
+gulp.task('dev',['db:migrate','db:seed','watch','dev:server']);
 
 gulp.task('default',['dev']); //default gulp task

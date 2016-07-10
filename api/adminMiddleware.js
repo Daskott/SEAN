@@ -5,8 +5,9 @@ var express = require('express');
 var parser = require('body-parser');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
-var Role = require(__dirname+'/../models/roles');
 var middlewareRoute = express.Router();
+var models = require(__dirname+'/../models');
+var Role = models.Roles;
 
 // route middleware to verify a token
 middlewareRoute.use(function(request, response, next) {

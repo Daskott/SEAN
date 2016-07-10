@@ -32,7 +32,7 @@ exports.config = {
          savePath: 'log/e2e/html',
          screenshotsFolder: '-screenshots'
        })
-     );
+    );
 
     //add console reporters
     jasmine.getEnv().addReporter(

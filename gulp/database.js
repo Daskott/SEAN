@@ -17,9 +17,14 @@ gulp.task('db:migrate',shell.task(['./node_modules/.bin/sequelize db:migrate']))
 //undo migration
 gulp.task('db:migrate:undo',shell.task(['./node_modules/.bin/sequelize db:migrate:undo']));
 
-
 //make user admin
-gulp.task('user', function(){
+gulp.task('user', makeUserAdmin());
+
+/****************************************
+* helper function
+*******************************************/
+
+function makeUserAdmin(){
   //get arguments
   var index = process.argv.indexOf("--admin");
   var username = index !== -1?process.argv[index+1]:'';
@@ -62,4 +67,4 @@ gulp.task('user', function(){
     process.exit();
   });
 
-})
+}

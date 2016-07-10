@@ -46,7 +46,7 @@ $ npm install
 ```
   API_SECRET = "Anything you want"
 ```
-* In the ./SEAN dir, create a "/config/config.json" file with the following values:
+* In the ./SEAN dir, create this file "/config/config.json" with the following values[fill in your db password]:
 ```
 {
   "development": {

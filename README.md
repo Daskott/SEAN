@@ -85,7 +85,7 @@ $ gulp
 ```
 http://localhost:8080/
 ```
-* To make user admin: Form ./SEAN dir in terminal
+* To make a user admin: Form ./SEAN dir in terminal
 ```
 $ gulp user --admin <username>
 ```

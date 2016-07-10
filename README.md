@@ -44,11 +44,36 @@ $ npm install
 ```
 * In the ./SEAN dir, create a ".env" file with the following values:
 ```
-  DB_HOST=localhost
-  DB_STORAGE="mySql path"
-  DB_USER=root
-  DB_PASS=""
   API_SECRET = "Anything you want"
+```
+* In the ./SEAN dir, create this file "/config/config.json" with the following values (fill in your db password):
+```
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "SEAN",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  },
+  "test": {
+    "username": "root",
+    "password": "",
+    "database": "SEAN",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  },
+  "production": {
+    "username": "root",
+    "password": "",
+    "database": "SEAN",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  }
+}
 ```
 ## Start web server
 

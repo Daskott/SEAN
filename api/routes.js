@@ -190,7 +190,7 @@ api.use('/api', adminMiddleware);
 
 api.delete('/api/users/:id', function(request, response){
 		var userId = request.params.id;
-		//console.log("dec: "+request.decoded.role);
+		
 		User.destroy({
 		  where: {
 		    id: userId

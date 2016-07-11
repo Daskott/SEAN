@@ -1,8 +1,8 @@
 <div class="container content admin-body">
-  <h1>Hi {{currentUser.username}}!</h1>
+  <h1 id="admin-greeting">Hi {{currentUser.username}}!</h1>
   <div class="margin-bottom">
-    <h4 id="admin-title">Administrator</h4>
-    <span><button class="btn btn-primary" ng-click="logout()">Logout</button></span>
+    <h4 id="admin-role">Administrator</h4>
+    <span><button id="admin-logout-button" class="btn btn-primary" ng-click="logout()">Logout</button></span>
   </div>
   <flash-message>
   </flash-message>
@@ -21,7 +21,7 @@
             <option ng-repeat="role in roles" value="{{role.name}}">{{role.name}}</option>
           </select>
         </div>
-        <button type="button" ng-disabled="user.id === currentUser.id" class="btn btn-danger" ng-click="delete(user.id)">
+        <button id="{{user.username+'_delete'}}" type="button" ng-disabled="user.id === currentUser.id" class="btn btn-danger" ng-click="delete(user.id)">
           Delete
         </button>
       </div>

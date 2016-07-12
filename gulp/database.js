@@ -29,7 +29,7 @@ function makeUserAdmin(){
   var index = process.argv.indexOf("--admin");
   var username = index !== -1?process.argv[index+1]:'';
 
-  if(!username){
+  if(!username && process.argv.indexOf("user") !== -1){
     console.log("please provide proper arguments:\n--user:admin <username>".red)
     return;
   }
@@ -58,7 +58,9 @@ function makeUserAdmin(){
           process.exit();
         });
     }else{
-      console.log(("user '"+username+"' does not exits!").red);
+      if(index !== -1){
+        console.log(("user '"+username+"' does not exits!").red);
+      }
       process.exit();
     }
   })

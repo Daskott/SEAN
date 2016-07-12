@@ -6,7 +6,7 @@
 var SeanSignUpPage = require(__dirname+'/support/pageObjects/signUpPageObj');
 var SeanLoginPage = require(__dirname+'/support/pageObjects/seanLoginPageObj');
 var AdminHomPage = require(__dirname+'/support/pageObjects/adminHomePageObj');
-var User = require(__dirname+'/support/db/users');
+var User = require(__dirname+'/../support/db/users');
 
 /**********************************************
 * Actual tests

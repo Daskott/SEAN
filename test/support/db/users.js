@@ -1,4 +1,4 @@
-var UserModel = require(__dirname+'/../../../../models/').Users;
+var UserModel = require(__dirname+'/../../../models/').Users;
 
 var User = function() {
 
@@ -19,7 +19,7 @@ var User = function() {
       });
   };
 
-  this.makeUserAdmin = function(username, callback) {
+  this.makeUserAdmin = function(username) {
     //update user roleId in db
     UserModel.find({
       where: {
@@ -36,8 +36,7 @@ var User = function() {
               where: {username: username}
             })
           .then(function(data) {
-              //call 'callback' if any
-              callback();
+              //do stuff
           })
           .catch(function(error){
             console.log("Error: "+error.message);

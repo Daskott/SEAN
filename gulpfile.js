@@ -15,7 +15,8 @@ fs.readdirSync(__dirname + '/gulp').forEach(function (task) { require('./gulp/' 
 * define meta tasks
 *******************************************/
 
-//database is seeded each time you run gulp
-gulp.task('dev', gulpsync.sync(['dev:server','db:migrate','db:seed','watch']));
+gulp.task('db:init', gulpsync.sync(['db:migrate','db:seed']));
+
+gulp.task('dev', ['dev:server', 'watch']);
 
 gulp.task('default',['dev']); //default gulp task

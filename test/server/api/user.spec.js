@@ -21,8 +21,8 @@ var newUserCredentials = {
 var adminUser = {
   firstName:'Eddy',
   lastName:'Daskott',
-  username:'eddy',
-  password:'password',
+  username:'edd',
+  password:'passwordd',
   roleId: 1
 }
 var adminUserCredentials = {
@@ -40,7 +40,8 @@ describe('api.users', function () {
     api.post('/api/users')
     .send(adminUser)
     .expect(201)
-    .end(function() {
+    .end(function(error, response) {
+      if (error) return done(error);
       //make user admin
       var userModel = new User();
       userModel.makeUserAdmin(adminUser.username);
@@ -48,7 +49,8 @@ describe('api.users', function () {
     });
   });
 
-  //create user record
+
+  //create user accout
 	describe('POST /api/users', function () {
 
 		it('should register user', function (done) {

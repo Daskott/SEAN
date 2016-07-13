@@ -81,6 +81,10 @@ $ npm install
 ```
 $ gulp
 ```
+* Initialize db, from terminal run (ONLY HAVE TO DO THIS ON THE 1ST RUN):
+```
+$ gulp db:init
+```
 * Access the web app on your localhost:
 ```
 http://localhost:8080/

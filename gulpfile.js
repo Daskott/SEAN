@@ -17,6 +17,8 @@ fs.readdirSync(__dirname + '/gulp').forEach(function (task) { require('./gulp/' 
 
 gulp.task('db:init', gulpsync.sync(['db:migrate','db:seed']));
 
+gulp.task('test', gulpsync.sync(['karma','mocha','protractor']));
+
 gulp.task('dev', ['dev:server', 'watch']);
 
 gulp.task('default',['dev']); //default gulp task

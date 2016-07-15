@@ -17,7 +17,7 @@ exports.config = {
    * Command line args to pass to ghostdriver, phantomjs's browser driver.
    * See https://github.com/detro/ghostdriver#faq
    */
-  'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
+  'phantomjs.ghostdriver.cli.args': ['--webdriver=4444','--loglevel=DEBUG']
   },
 
   seleniumAddress: 'http://localhost:4444/wd/hub',

@@ -1,5 +1,5 @@
 {
-  "name": "SEAN",
+  "name": "sean",
   "devDependencies": {
     "angular": "^1.5.7",
     "angular-animate": "^1.5.7",
@@ -8,6 +8,7 @@
     "bcryptjs": "^2.3.0",
     "blanket": "^1.2.3",
     "body-parser": "^1.15.1",
+    "bower-files": "^3.13.3",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
     "dotenv": "^2.0.0",
@@ -24,6 +25,7 @@
     "gulp-stylus": "^2.4.0",
     "gulp-sync": "^0.1.4",
     "gulp-uglify": "^1.5.3",
+    "gulp-uglifycss": "^1.0.6",
     "jasmine": "^2.4.1",
     "jasmine-console-reporter": "^1.2.6",
     "jshint": "^2.9.2",
@@ -53,6 +55,24 @@
     "supertest": "^1.2.0"
   },
   "scripts": {
-    "test": ""
-  }
+    "test": "",
+    "start": "node server.js"
+  },
+  "description": "SEAN is a simple project for an easy starting point with [Mysql](https://www.mysql.com/) (using the [Sequelize] (http://docs.sequelizejs.com/en/latest/) ORM), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](https://angularjs.org/) based applications. It is designed to give you a quick and organized way to start developing SEAN based web apps.",
+  "version": "1.0.0",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daskott/SEAN.git"
+  },
+  "author": "https://github.com/Daskott/SEAN/graphs/contributors",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Daskott/SEAN/issues"
+  },
+  "homepage": "https://github.com/Daskott/SEAN#readme"
 }

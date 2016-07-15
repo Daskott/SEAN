@@ -3,6 +3,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var ngAnnotate = require('gulp-ng-annotate');
 var sourcemaps = require('gulp-sourcemaps');
+var concatCss = require('gulp-concat-css');
 var livereload = require('gulp-livereload');
 
 
@@ -27,15 +28,42 @@ gulp.task('js', function(){
 });
 
 
-gulp.task('vendor-js', function(){
-  gulp.src(['./vendor/js/jquery-2.1.4.min.js',
-            './vendor/js/angular.min.js',
-            './vendor/js/**/*.js'])
-  //.pipe(sourcemaps.init())
-  .pipe(concat('vendor.js'))
-  .pipe(ngAnnotate())
-  .pipe(uglify())
-  //.pipe(sourcemaps.write())
-  .pipe(gulp.dest('assets/vendor'))
-  .pipe(livereload());
+
+/****************************************************
+* Task for bower components [front-end dependecies]
+*****************************************************/
+var lib  = require('bower-files')({
+            overrides: {
+                bootstrap: {
+                    main: [
+                        './dist/js/bootstrap.js',
+                        './dist/css/bootstrap.css',
+                        './dist/fonts/*.*'
+                    ]
+                }
+            }
+        });
+
+var uglifycss = require('gulp-uglifycss');
+
+//js
+gulp.task('bower-js', function () {
+  gulp.src(lib.ext('js').files)
+    .pipe(concat('lib.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('assets/vendor/js'));
 });
+
+//css
+gulp.task('bower-css', function () {
+  gulp.src(lib.ext('css').files)
+    .pipe(concatCss('lib.min.css'))
+    .pipe(uglifycss({
+      "maxLineLen": 80,
+      "uglyComments": true
+    }))
+    .pipe(gulp.dest('assets/vendor/css'));
+});
+
+//all bower
+gulp.task('bower', ['bower-css','bower-js']);

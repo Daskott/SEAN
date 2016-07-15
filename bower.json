@@ -1,0 +1,29 @@
+{
+  "name": "sean",
+  "dependencies": {
+    "angular": "~1.5.5",
+    "angular-mocks": "~1.5.5",
+    "angular-route": "~1.5.5",
+    "angular-cookies": "~1.5.5",
+    "angular-animate": "~1.5.5",
+    "angular-css": "~1.0.8",
+    "angular-flash-alert": "^2.3.0",
+    "jquery": "^3.1.0",
+    "bootstrap": "^3.3.6"
+  },
+  "description": "",
+  "main": "",
+  "authors": [
+    "https://github.com/Daskott/SEAN/graphs/contributors"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Daskott/SEAN",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets",
+    "test",
+    "tests"
+  ]
+}

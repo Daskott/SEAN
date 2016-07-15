@@ -29,7 +29,7 @@ exports.config = {
     //add jasmine html && screenshots reporters
     jasmine.getEnv().addReporter(
        new Jasmine2HtmlReporter({
-         savePath: 'log/e2e/html',
+         savePath: 'logs/e2e/html',
          screenshotsFolder: '-screenshots'
        })
     );

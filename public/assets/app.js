@@ -5,10 +5,10 @@ var app = angular.module('app', [
   'ngAnimate',
   'angularCSS',
   'ngFlash'
-  // 'ngSanitize',
-  // 'ngTagsInput',
-  // 'firebase'
 ]);
+// 'ngSanitize',
+// 'ngTagsInput',
+// 'firebase'
 
 
 (function () {

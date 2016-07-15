@@ -17,16 +17,3 @@ gulp.task( 'css', function(){
   .pipe(gulp.dest('public/assets'))
   .pipe(livereload());
 });
-
-
-//preprocess vendor style sheet
-gulp.task('vendor-css', function(){
-  gulp.src(['./vendor/css/bootstrap.min.css','./vendor/css/*.css'])
-  .pipe(concatCss('vendor.css'))
-  .pipe(autoprefixer({
-			browsers: ['last 2 versions'],
-			cascade: false
-		}))
-  .pipe(gulp.dest('assets/vendor'))
-  .pipe(livereload());
-});

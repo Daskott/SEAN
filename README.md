@@ -38,7 +38,7 @@ $ npm install -g bower
 ```
 $ mysql> create database SEAN;
 ```
-* In the ./SEAN dir from terminal run:
+* In the ./SEAN dir from terminal run:(choose to install jquery#1.9.1 - 2)
 ```
 $ npm install && bower install
 ```

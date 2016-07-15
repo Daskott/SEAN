@@ -38,9 +38,9 @@ $ npm install -g bower
 ```
 $ mysql> create database SEAN;
 ```
-* In the ./SEAN dir from terminal run: 
+* In the ./SEAN dir from terminal run:
 ```
-$ npm install
+$ npm install && bower install
 ```
 * In the ./SEAN dir, create a ".env" file with the following values:
 ```

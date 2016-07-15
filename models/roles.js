@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
     roleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: true
     },
     name: {
       type: DataTypes.STRING,

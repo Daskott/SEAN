@@ -93,3 +93,21 @@ http://localhost:8080/
 ```
 $ gulp user --admin <username>
 ```
+## Tests
+
+* To run all tests (from terminal run):
+```
+$ gulp test
+```
+* To run end-to-end tests (from terminal run):
+```
+$ gulp protractor
+```
+* To run server/api tests (from terminal run):
+```
+$ gulp mocha
+```
+* To run angular tests (from terminal run):
+```
+$ gulp karma
+```

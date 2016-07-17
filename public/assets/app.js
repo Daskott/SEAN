@@ -122,8 +122,6 @@ angular.module('app')
   $scope.updateUserRole = function (user, role) {
 
     $scope.dataLoading = true;
-    console.log(user);
-
     //set user role
     for(var i = 0; i < $scope.roles.length; i++){
       if($scope.roles[i].name === role){

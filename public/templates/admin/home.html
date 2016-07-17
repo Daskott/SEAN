@@ -16,7 +16,7 @@
       <div class="del-pane">
         <div class="form-group">
           <label for="roles">User role (select one):</label>
-          <select ng-model="selectedItem" ng-init="selectedItem = roles[user.roleId].name" class="form-control"
+          <select ng-model="selectedItem" ng-init="selectedItem = user.Role.name" class="form-control"
           ng-change="updateUserRole(user, selectedItem)">
             <option ng-repeat="role in roles" value="{{role.name}}">{{role.name}}</option>
           </select>

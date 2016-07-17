@@ -57,29 +57,6 @@ var app = angular.module('app', [
     }
 })();
 
-/**
-* if you like, you can specify different css
-* for each directive, using this option;
-* e.g
-*   controller: function ($scope, $css) {
-*    $css.bind('/app.css', $scope);
-*   }
-*/
-
-angular.module('app')
-.directive('regularHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'regularUser/home.html'
-  }
-})
-.directive('adminHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'admin/home.html'
-  }
-});
-
 angular.module('app')
 .controller('ApplicationCtrl', function ($scope, $rootScope, $cookieStore, $location, UserService) {
 
@@ -146,10 +123,11 @@ angular.module('app')
 
     $scope.dataLoading = true;
     console.log(user);
+
     //set user role
     for(var i = 0; i < $scope.roles.length; i++){
       if($scope.roles[i].name === role){
-        user.roleId = i;
+        user.roleId = $scope.roles[i].id;
         break;
       }
     }
@@ -234,6 +212,29 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
             }
         });
     //}
+  }
+});
+
+/**
+* if you like, you can specify different css
+* for each directive, using this option;
+* e.g
+*   controller: function ($scope, $css) {
+*    $css.bind('/app.css', $scope);
+*   }
+*/
+
+angular.module('app')
+.directive('regularHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'regularUser/home.html'
+  }
+})
+.directive('adminHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'admin/home.html'
   }
 });
 

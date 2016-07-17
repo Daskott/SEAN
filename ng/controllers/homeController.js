@@ -26,10 +26,11 @@ angular.module('app')
 
     $scope.dataLoading = true;
     console.log(user);
+
     //set user role
     for(var i = 0; i < $scope.roles.length; i++){
       if($scope.roles[i].name === role){
-        user.roleId = i;
+        user.roleId = $scope.roles[i].id;
         break;
       }
     }

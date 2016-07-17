@@ -130,33 +130,40 @@ var handler = {
   		var currentUserId = request.decoded.id;
       var isRoleUpdate = userUpdate.roleId? true:false;
 
-      //update user record
+      //find user you wish to update
       User.find({
         where: {
           id: userId
-        },
-        include: [{model: Role}]
+        }
       })
       .then(function(user) {
         // if the record exists in the db
         if (user) {
 
-          if(user.Role.name === 'Admin'|| userId+'' === currentUserId+'' && !isRoleUpdate){
-            User.update(
-            		userUpdate
-            	,
-            	{
-            		where: {id: userId}
-            	})
-            .then(function(data) {
-            		return response.status(200).json({success:true, message: 'User updated!'});
-            })
-            .catch(function(error){
-            	return response.status(403).send({success:false, message:error.message});
-            });
-          }else {
-            return response.status(401).json({ success: false, message: 'You do not have Authorization.'});
-          }
+          //get role of user making request
+          User.findOne({
+            where: {
+              id: currentUserId
+            },
+            include: [{model: Role}]
+          })
+          .then(function(currentUser){
+            /*
+            * If user making the request is an Admin, then he/she can update anything
+            * If normal 'User', make sure he/she is updating only their record
+            */
+            if(currentUser.Role.name === 'Admin'|| userId+'' === currentUserId+'' && !isRoleUpdate){
+              User.update(userUpdate, { where: {id: userId} })
+              .then(function(data) {
+              		return response.status(200).json({success:true, message: 'User updated!'});
+              })
+              .catch(function(error){
+              	return response.status(403).send({success:false, message:error.message});
+              });
+            }else {
+              return response.status(401).json({ success: false, message: 'You do not have Authorization.'});
+            }
+          })
         }
       })
       .catch(function(error){

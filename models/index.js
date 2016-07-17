@@ -35,7 +35,6 @@ Object.keys(db).forEach(function(modelName) {
 */
 var user = sequelize.models.User;
 var role = sequelize.models.Role;
-var userRole = sequelize.models.UserRole;
 
 // one-to-many relationship
 // 1 user - 1 role

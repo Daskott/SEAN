@@ -5,7 +5,6 @@ var colors = require('colors');
 var models = require(__dirname+'/../models');
 var User = models.User;
 var Role = models.Role;
-var UserRole = models.UserRole;
 
 //run all seed files
 gulp.task('db:seed',shell.task(['./node_modules/.bin/sequelize db:seed:all']));

@@ -25,6 +25,8 @@ api.use('/api', middleware);
 
 api.get('/api/users', handler.getAllUsers);
 
+api.get('/api/users/:id', handler.getUser);
+
 api.put('/api/users/:id', handler.updateUser);
 
 api.get('/api/roles', handler.getUserRoles);

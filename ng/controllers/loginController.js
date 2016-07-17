@@ -13,9 +13,17 @@ angular.module('app')
 				console.log(response.expiresIn);
             if (response.success) {
 							UserService.clearCredentials();
-						 	UserService.setCredentials(response.user, response.token, response.expiresIn);
-							$scope.$emit('login');
-              $location.path('/home');
+
+							//get user record & set credentials
+							UserService.getUser(response.userId, response.token)
+							.then(function(data){
+								UserService.setCredentials(data.user, response.token, response.expiresIn);
+								$scope.$emit('login');
+	              $location.path('/home');
+							})
+							.catch(function(error){
+				  			console.log(error.message);
+				  		});
             } else {
               FlashService.failureAlert("Your username or password is incorrect.");
               $scope.dataLoading = false;

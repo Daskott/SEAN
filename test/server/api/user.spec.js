@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var api = require(__dirname+'/../support/api' );
-var Users = require(__dirname+'/../../../models').users;
+var Users = require(__dirname+'/../../../models').user;
 var User = require(__dirname+'/../../support/db/users');
 
 /*****************************
@@ -11,7 +11,7 @@ var newUser = {
   lastName:'Lanna',
   username:'Mimi',
   password:'password',
-  roleId: 1
+  roleId: ''
 }
 var newUserCredentials = {
   token: '',
@@ -23,7 +23,7 @@ var adminUser = {
   lastName:'Daskott',
   username:'edd',
   password:'passwordd',
-  roleId: 1
+  roleId: ''
 }
 var adminUserCredentials = {
   token: '',
@@ -77,7 +77,7 @@ describe('api.users', function () {
 
         //get user credentials
         newUserCredentials.token = response.body.token;
-        newUserCredentials.userId = response.body.user.id;
+        newUserCredentials.userId = response.body.userId;
 			}).end(done)
 		})
 	})
@@ -92,6 +92,19 @@ describe('api.users', function () {
       .expect(function (response) {
 				expect(response.body.length >= 1);
         expect(response.body).to.have.property('users');
+			}).end(done)
+		})
+	})
+
+  //get one user
+	describe('GET /api/users', function () {
+
+		it('should return one user', function (done) {
+			api.get('/api/users/'+newUserCredentials.userId)
+      .set('x-auth', newUserCredentials.token)
+			.expect(200)
+      .expect(function (response) {
+        expect(response.body.user.firstName).to.equal(newUser.firstName);
 			}).end(done)
 		})
 	})
@@ -130,7 +143,7 @@ describe('api.users', function () {
 
         //get user credentials
         adminUserCredentials.token = response.body.token;
-        adminUserCredentials.userId = response.body.user.id;
+        adminUserCredentials.userId = response.body.userId;
       })
       .end(done);
     })

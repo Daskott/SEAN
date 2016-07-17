@@ -1,14 +1,10 @@
 module.exports = function(sequelize, DataTypes) {
 
   //sequelize.define('name', {attributes}, {options}).
-  var Role = sequelize.define('Roles', {
-    roleId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true
-    },
+  var Role = sequelize.define('Role', {
     name: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false
     },
     description: {

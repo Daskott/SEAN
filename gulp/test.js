@@ -8,7 +8,8 @@ gulp.task('mocha', function () {
 		// gulp-mocha needs filepaths so you can't have any plugins before it
 		.pipe(mocha({timeout: 5000}))
     .once('end', function () {
-			//process.exit();
+			// process.exit();
+			return;
 		});
 });
 

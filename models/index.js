@@ -33,12 +33,17 @@ Object.keys(db).forEach(function(modelName) {
 /*
 * define model/table relationships
 */
-var users = sequelize.models.Users;
-var roles = sequelize.models.Roles;
-//one-to-one relationship [a user can only have one role]
-users.belongsTo(roles, {foreignKey: 'roleId', targetKey: 'roleId'})
+var user = sequelize.models.User;
+var role = sequelize.models.Role;
+var userRole = sequelize.models.UserRole;
+
+// one-to-many relationship
+// 1 user - 1 role
+// 1 role - many users
+user.belongsTo(role, {foreignKey: 'roleId'})
 
 //export
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
 module.exports = db;

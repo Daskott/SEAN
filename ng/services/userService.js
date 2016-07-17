@@ -6,6 +6,14 @@ var app = angular.module('app');
      return $http.get('/api/users').then(handleSuccess, handleError('Error getting all users'));
    }
 
+   svc.getUser = function (userId, token) {
+     //if a token is provided, use it
+     if(token){
+      return $http.get('/api/users/'+userId, {headers: {'x-auth': token}}).then(handleSuccess, handleError('Error getting user'));
+     }
+     return $http.get('/api/users/'+userId).then(handleSuccess, handleError('Error getting user'));
+   }
+
    svc.register = function (user) {
      return $http.post('/api/users', user).then(handleSuccess, handleError('Error creating user'));
    }

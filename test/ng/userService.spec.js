@@ -6,14 +6,14 @@ var user1 = {
   lastName:'Lanna',
   username:'Mimi',
   password:'password',
-  roleId: 1
+  roleId: ''
 };
 var user2 = {
   firstName:'Eddy',
   lastName:'Daskott',
   username:'edd',
   password:'passwordd',
-  roleId: 1
+  roleId: ''
 };
 
 /******************************
@@ -46,6 +46,22 @@ describe('userService', function () {
       expect(UserService.getAllUsers).to.exist;
 			UserService.getAllUsers().then(function (users) {
 				expect(users).to.have.length(2)
+			});
+		});
+	})
+
+  describe('#GET ONE USER', function () {
+		beforeEach(function () {
+			//setup backend: angular does not allow http calls outside of test suite
+			$httpBackend
+			.expectGET('/api/users/1')
+			.respond(user1);
+		});
+
+		it('should return 1 user', function () {
+      expect(UserService.getUser).to.exist;
+			UserService.getUser(1,null).then(function (user) {
+				expect(user.firstName).to.equal(user1.firstName);
 			});
 		});
 	})

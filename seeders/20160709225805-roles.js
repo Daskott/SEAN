@@ -22,7 +22,6 @@ module.exports = {
       */
 
     var user = {
-          roleId: 1,
           name: "User",
           description:  "can veiw",
           createdAt: date,
@@ -30,7 +29,6 @@ module.exports = {
     };
 
     var admin = {
-          roleId: 0,
           name: "Admin",
           description:  "can veiw, can delete",
           createdAt: date,
@@ -38,8 +36,8 @@ module.exports = {
     };
 
     //clear any record if any, and add it again
-    queryInterface.bulkDelete('Roles', null, {});
-    return queryInterface.bulkInsert('Roles', [admin, user], {});
+    queryInterface.bulkDelete('Role', null, {});
+    return queryInterface.bulkInsert('Role', [admin, user], {});
 
   },
 
@@ -51,6 +49,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
-    return queryInterface.bulkDelete('Roles', null, {});
+    return queryInterface.bulkDelete('Role', null, {});
   }
 };

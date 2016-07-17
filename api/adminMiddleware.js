@@ -7,7 +7,7 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var middlewareRoute = express.Router();
 var models = require(__dirname+'/../models');
-var Role = models.Roles;
+var Role = models.Role;
 
 // route middleware to verify a token
 middlewareRoute.use(function(request, response, next) {
@@ -24,9 +24,9 @@ middlewareRoute.use(function(request, response, next) {
         return response.json({ success: false, expired: true, message: 'Failed to authenticate token.'});
       } else {
         // if user is an admin Give access
-        Role.findAll()
-        .then(function(roles){
-            if(roles[decoded.roleId].name === 'Admin'){
+        Role.findOne({ where: {id: decoded.roleId}})
+        .then(function(role){
+            if(role.name === 'Admin'){
                 next();
             }else {
               return response.status(401).json({ success: false, message: 'You do not have Authorization.'});

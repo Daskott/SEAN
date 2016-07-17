@@ -57,6 +57,29 @@ var app = angular.module('app', [
     }
 })();
 
+/**
+* if you like, you can specify different css
+* for each directive, using this option;
+* e.g
+*   controller: function ($scope, $css) {
+*    $css.bind('/app.css', $scope);
+*   }
+*/
+
+angular.module('app')
+.directive('regularHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'regularUser/home.html'
+  }
+})
+.directive('adminHomeView', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'admin/home.html'
+  }
+});
+
 angular.module('app')
 .controller('ApplicationCtrl', function ($scope, $rootScope, $cookieStore, $location, UserService) {
 
@@ -164,9 +187,17 @@ angular.module('app')
 				console.log(response.expiresIn);
             if (response.success) {
 							UserService.clearCredentials();
-						 	UserService.setCredentials(response.user, response.token, response.expiresIn);
-							$scope.$emit('login');
-              $location.path('/home');
+
+							//get user record & set credentials
+							UserService.getUser(response.userId, response.token)
+							.then(function(data){
+								UserService.setCredentials(data.user, response.token, response.expiresIn);
+								$scope.$emit('login');
+	              $location.path('/home');
+							})
+							.catch(function(error){
+				  			console.log(error.message);
+				  		});
             } else {
               FlashService.failureAlert("Your username or password is incorrect.");
               $scope.dataLoading = false;
@@ -189,8 +220,7 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
     		 firstName: firstName,
     		 lastName: lastName,
     		 username: username,
-    		 password: password,
-         roleId: 1
+    		 password: password
     	}
 
     	UserService.register(user)
@@ -204,29 +234,6 @@ app.controller('RegisterCtrl', function ($scope, $location, UserService) {
             }
         });
     //}
-  }
-});
-
-/**
-* if you like, you can specify different css
-* for each directive, using this option;
-* e.g
-*   controller: function ($scope, $css) {
-*    $css.bind('/app.css', $scope);
-*   }
-*/
-
-angular.module('app')
-.directive('regularHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'regularUser/home.html'
-  }
-})
-.directive('adminHomeView', function () {
-  return {
-    restrict: 'E',
-    templateUrl: 'admin/home.html'
   }
 });
 
@@ -266,6 +273,14 @@ var app = angular.module('app');
 
    svc.getAllUsers = function () {
      return $http.get('/api/users').then(handleSuccess, handleError('Error getting all users'));
+   }
+
+   svc.getUser = function (userId, token) {
+     //if a token is provided, use it
+     if(token){
+      return $http.get('/api/users/'+userId, {headers: {'x-auth': token}}).then(handleSuccess, handleError('Error getting user'));
+     }
+     return $http.get('/api/users/'+userId).then(handleSuccess, handleError('Error getting user'));
    }
 
    svc.register = function (user) {

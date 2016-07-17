@@ -4,8 +4,8 @@ require('dotenv').config();
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var models = require(__dirname+'/../../models');
-var User = models.Users;
-var Role = models.Roles;
+var User = models.User;
+var Role = models.Role;
 
 /*******************************************************
 * Public routes here
@@ -24,7 +24,6 @@ var handler = {
         if (error) { return next(err) }
         if (!valid) { return response.status(401).send({success:false, message: 'Authentication failed. Wrong password.'}); }
 
-  			// console.log(user.dataValues);
   			var token;
   			var expiresIn;
 
@@ -49,13 +48,7 @@ var handler = {
   		      response.status(200).json({
   		        success: true,
   		        message: 'Authentication successful!',
-  						user:{
-  									id: user.id,
-  									roleId: user.roleId,
-  									firstName: user.firstName,
-  				    			lastName:  user.lastName,
-  				    			username:  user.username
-  				    			},
+  						userId:user.id,
   		        token: token,
   						expiresIn: expiresIn
   		      });
@@ -69,34 +62,53 @@ var handler = {
   	var user = request.body;
 
   	bcrypt.genSalt(10, function(err, salt) {
-  	    bcrypt.hash(user.password, salt, function(err, hash) {
-  	        // Store hash in your password DB.
-  	        user.password = hash;
-  					user.role = 1; //normal user
+  	  bcrypt.hash(user.password, salt, function(err, hash) {
+        // Store hash in your password DB.
+        user.password = hash;
 
-        User.findOrCreate({where: {username: user.username}, defaults: user})
-  			.spread(function(user, created) {
+        //assign user role ['Normal User']
+        Role.findOne({ where: {name: "User"} })
+        .then(function(role){
+          user.roleId = role.id;
 
-  		       //each user should have a unique username
-  		       if(created)
-  		       	 return response.status(201).send({success:true, message: 'User created!'});
-  		   	   else
-  		   	   	 return response.status(403)
-  						 								.send({success:false, message: 'A user already exist with the username "'+user.username+'"'});
+          //create user record
+          User.findOrCreate({where: {username: user.username}, defaults: user})
+    			.spread(function(user, created) {
 
-  		     })
-  			.catch(function(error){
-  				return response.status(400).send(error.message);
-  			});
-  	    });
+              //check if user was created
+              if(created){
+               return response.status(201).send({success:true, message: 'User created!'});
+              }else{
+                return response.status(403)
+                              .send({success:false, message: 'A user already exist with the username "'+user.username+'"'});
+             }
+    		  })
+    			.catch(function(error){
+    				return response.status(400).send(error.message);
+    			});
+    	  })
+        .catch(function(error){
+             return response.status(400).send(error.message);
+        });
+      })
   	});
-
   },
 
   getAllUsers: function(request, response){
-  		User.findAll({attributes: { exclude: ['password'] }})
+  		User.findAll({attributes: { exclude: ['password'] }, include: [{model: Role}] })
   		.then(function(users){
   				return response.status(200).json({success:true, users:users});
+  		})
+  		.catch(function(error){
+  			return response.status(400).send({success:false, message:error.message});
+  		});
+  },
+
+  getUser: function(request, response){
+      var userId = request.params.id;
+      User.findOne({ where: {id: userId}, attributes: { exclude: ['password'] }, include: [{model: Role}] })
+      .then(function(user) {
+  				return response.status(200).json({success:true, user:user});
   		})
   		.catch(function(error){
   			return response.status(400).send({success:false, message:error.message});
@@ -116,41 +128,40 @@ var handler = {
   		*/
   		var userRoleId = request.decoded.roleId;
   		var currentUserId = request.decoded.id;
-  		Role.findAll()
-  		.then(function(roles){
-  			var isRoleUpdate = userUpdate.roleId? true:false;
+      var isRoleUpdate = userUpdate.roleId? true:false;
 
-  			if(roles[userRoleId].name === 'Admin'
-  					|| userId+'' === currentUserId+'' && !isRoleUpdate){
-  				//update user record
-  				User.find({
-  				  where: {
-  				    id: userId
-  				  }
-  				})
-  				.then(function(user) {
-  				  if (user) { // if the record exists in the db
-  				    	User.update(
-  									userUpdate
-  								,
-  								{
-  									where: {id: userId}
-  			  				})
-  							.then(function(data) {
-  									return response.status(200).json({success:true, message: 'User updated!'});
-  							})
-  							.catch(function(error){
-  								return response.status(403).send({success:false, message:error.message});
-  							});
-  				  }
-  				})
-  				.catch(function(error){
-  					return response.status(403).send({success:false, message:error.message});
-  				});
-  			}else {
-  				return response.status(401).json({ success: false, message: 'You do not have Authorization.'});
-  			}
-  		})
+      //update user record
+      User.find({
+        where: {
+          id: userId
+        },
+        include: [{model: Role}]
+      })
+      .then(function(user) {
+        // if the record exists in the db
+        if (user) {
+
+          if(user.Role.name === 'Admin'|| userId+'' === currentUserId+'' && !isRoleUpdate){
+            User.update(
+            		userUpdate
+            	,
+            	{
+            		where: {id: userId}
+            	})
+            .then(function(data) {
+            		return response.status(200).json({success:true, message: 'User updated!'});
+            })
+            .catch(function(error){
+            	return response.status(403).send({success:false, message:error.message});
+            });
+          }else {
+            return response.status(401).json({ success: false, message: 'You do not have Authorization.'});
+          }
+        }
+      })
+      .catch(function(error){
+        return response.status(403).send({success:false, message:error.message});
+      });
   },
 
   getUserRoles: function(request, response){

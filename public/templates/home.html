@@ -1,4 +1,4 @@
 <div>
-   <regular-home-view ng-show="roles[currentUser.roleId].name === 'User'"></regular-home-view>
-   <admin-home-view ng-show="roles[currentUser.roleId].name === 'Admin'"></admin-home-view>
+   <regular-home-view ng-show="currentUser.Role.name === 'User'"></regular-home-view>
+   <admin-home-view ng-show="currentUser.Role.name === 'Admin'"></admin-home-view>
 </div>

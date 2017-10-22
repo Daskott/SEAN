@@ -27,7 +27,7 @@ $ sudo apt-get install nodejs
 * *git* - Get git <a href="http://git-scm.com/download/mac">from here</a>.
 
 ## Prerequisite packages
-
+* Install <a href="https://yarnpkg.com/lang/en/docs/install/">Yarn</a>.
 * Sean currently uses gulp as a build tool and bower to manage frontend packages.
 ```
 $ npm install -g gulp
@@ -40,7 +40,7 @@ $ mysql> create database SEAN;
 ```
 * In the ./SEAN dir from terminal run:(choose to install jquery#1.9.1 - 2)
 ```
-$ npm install && bower install
+$ yarn install && bower install
 ```
 * In the ./SEAN dir, create a ".env" file with the following values:
 ```
